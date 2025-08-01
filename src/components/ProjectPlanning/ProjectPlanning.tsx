@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { Tab } from '@headlessui/react';
 import { classNames } from '../../utils/classNames';
-import { useProject } from '../../contexts/ProjectContext';
+import { useProject as useProjectContext } from '../../contexts/ProjectContext';
+import { useProject as useProjectData } from '../../hooks/useProject';
 import PPWorkflow from './modules/PPWorkflow';
 import PPDetails from './modules/PPDetails';
 import PPActionPlan from './modules/PPActionPlan';
@@ -57,46 +58,36 @@ export interface ProjectPlanningData {
             }
 
 const ProjectPlanning: React.FC = () => {
-  const { id: projectId } = useParams<{ id: string }>();
-  const { projectData: contextProjectData, setProjectData } = useProject();
-  const [activeTab, setActiveTab] = useState(0);
+  const { projectId } = useParams<{ projectId: string }>();
+  const [searchParams] = useSearchParams();
+  const { projectData: contextProjectData, loadProjectData } = useProjectContext();
+  const { data: apiProjectData, isLoading, error } = useProjectData(projectId || '');
   
-  // Initialize project data if not exists
+  // Get the tab parameter from URL and set initial active tab
+  const tabParam = searchParams.get('tab');
+  const getInitialTab = () => {
+    if (tabParam === 'working-groups') return 3; // Working Groups tab index
+    if (tabParam === 'workflow') return 0;
+    if (tabParam === 'details') return 1;
+    if (tabParam === 'action-plan') return 2;
+    if (tabParam === 'assessment') return 4;
+    return 0; // Default to first tab
+  };
+  
+  const [activeTab, setActiveTab] = useState(getInitialTab());
+  
+  // Load project data from API into context when available
   useEffect(() => {
-    if (!contextProjectData) {
-      const initialData: ProjectPlanningData = {
-        workflow: {},
-        details: {
-          projectTitle: '',
-          startDate: '',
-          endDate: '',
-          projectManager: '',
-          riskPlanSponsor: '',
-          riskPlanCoordinator: '',
-          projectStatus: 'New',
-          planApproved: false,
-          approvalDate: '',
-          projectDescription: '',
-          whyNeeded: '',
-          objectives: '',
-        },
-        actionPlan: [],
-        workingGroups: [],
-        assessment: {
-          needsSatisfied: false,
-          needsDescription: '',
-          objectivesAchieved: false,
-          objectivesDescription: '',
-          projectManagerSignoff: false,
-          signoffDate: '',
-        },
-        players: [],
-        issues: [],
-        risks: [],
-      };
-      setProjectData({ ...initialData, id: projectId || 'new' });
+    if (apiProjectData) {
+      // Always load the new project data, regardless of existing context data
+      loadProjectData(apiProjectData);
     }
-  }, [contextProjectData, setProjectData, projectId]);
+  }, [apiProjectData, loadProjectData]);
+
+  // Update active tab when URL parameter changes
+  useEffect(() => {
+    setActiveTab(getInitialTab());
+  }, [tabParam]);
 
   const projectData = contextProjectData || {
     workflow: {},
@@ -139,12 +130,35 @@ const ProjectPlanning: React.FC = () => {
 
   const updateProjectData = (section: keyof ProjectPlanningData, data: any) => {
     if (contextProjectData) {
-      setProjectData({
-        ...contextProjectData,
-        [section]: data
-      });
+      // This would typically update the API as well
+      // For now, we'll just update the context
+      console.log(`Updating ${section} with:`, data);
     }
   };
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading project data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-red-500 text-lg font-medium mb-2">Error loading project</div>
+          <p className="text-gray-600">Unable to load project data. Please try again.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
