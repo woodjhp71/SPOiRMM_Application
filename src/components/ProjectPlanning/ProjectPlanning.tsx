@@ -141,7 +141,7 @@ const ProjectPlanning: React.FC = () => {
     if (contextProjectData) {
       setProjectData({
         ...contextProjectData,
-        [section]: { ...(contextProjectData[section] as any), ...data }
+        [section]: data
       });
     }
   };
