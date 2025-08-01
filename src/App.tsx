@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import ProjectPlanning from './components/ProjectPlanning/ProjectPlanning';
 import PlayersChart from './components/PlayersChart/PlayersChart';
 import IssuesList from './components/IssuesList/IssuesList';
+import RiskRegister from './components/RiskRegister/RiskRegister';
 import { ProjectProvider } from './contexts/ProjectContext';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
                         <Route path="/project/:id" element={<ProjectPlanning />} />
                         <Route path="/project/:id/players" element={<PlayersChart />} />
                         <Route path="/project/:id/issues" element={<IssuesList />} />
+                        <Route path="/project/:id/register" element={<RiskRegister />} />
                       </Routes>
         </div>
       </Router>

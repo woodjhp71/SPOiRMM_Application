@@ -10,6 +10,7 @@ import PPWorkingGroups from './modules/PPWorkingGroups';
 import PPAssessment from './modules/PPAssessment';
 import { Player } from '../PlayersChart/PlayersChart';
 import { Issue } from '../IssuesList/IssuesList';
+import { Risk } from '../RiskRegister/RiskRegister';
 
 export interface ProjectPlanningData {
   workflow: any;
@@ -52,6 +53,7 @@ export interface ProjectPlanningData {
   };
                 players: Player[];
               issues: Issue[];
+              risks: Risk[];
             }
 
 const ProjectPlanning: React.FC = () => {
@@ -90,6 +92,7 @@ const ProjectPlanning: React.FC = () => {
         },
         players: [],
         issues: [],
+        risks: [],
       };
       setProjectData({ ...initialData, id: projectId || 'new' });
     }
@@ -123,6 +126,7 @@ const ProjectPlanning: React.FC = () => {
     },
     players: [],
     issues: [],
+    risks: [],
   };
 
   const tabs = [

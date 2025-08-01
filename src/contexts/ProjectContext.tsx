@@ -2,10 +2,12 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { Player } from '../components/PlayersChart/PlayersChart';
 import { ProjectPlanningData } from '../components/ProjectPlanning/ProjectPlanning';
 import { Issue } from '../components/IssuesList/IssuesList';
+import { Risk } from '../components/RiskRegister/RiskRegister';
 
 export interface ProjectData extends ProjectPlanningData {
   id: string;
   issues: Issue[];
+  risks: Risk[];
 }
 
 interface ProjectContextType {
@@ -14,6 +16,7 @@ interface ProjectContextType {
   updateProjectSection: (section: keyof ProjectData, data: any) => void;
   updatePlayers: (players: Player[]) => void;
   updateIssues: (issues: Issue[]) => void;
+  updateRisks: (risks: Risk[]) => void;
 }
 
 const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
@@ -60,13 +63,23 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({ children }) =>
                 }
               };
 
+              const updateRisks = (risks: Risk[]) => {
+                if (projectData) {
+                  setProjectData(prev => prev ? ({
+                    ...prev,
+                    risks
+                  }) : null);
+                }
+              };
+
               return (
                 <ProjectContext.Provider value={{
                   projectData,
                   setProjectData,
                   updateProjectSection,
                   updatePlayers,
-                  updateIssues
+                  updateIssues,
+                  updateRisks
                 }}>
                   {children}
                 </ProjectContext.Provider>
