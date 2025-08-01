@@ -9,6 +9,7 @@ import PPActionPlan from './modules/PPActionPlan';
 import PPWorkingGroups from './modules/PPWorkingGroups';
 import PPAssessment from './modules/PPAssessment';
 import { Player } from '../PlayersChart/PlayersChart';
+import { Issue } from '../IssuesList/IssuesList';
 
 export interface ProjectPlanningData {
   workflow: any;
@@ -49,8 +50,9 @@ export interface ProjectPlanningData {
     projectManagerSignoff: boolean;
     signoffDate: string;
   };
-  players: Player[];
-}
+                players: Player[];
+              issues: Issue[];
+            }
 
 const ProjectPlanning: React.FC = () => {
   const { id: projectId } = useParams<{ id: string }>();
@@ -87,6 +89,7 @@ const ProjectPlanning: React.FC = () => {
           signoffDate: '',
         },
         players: [],
+        issues: [],
       };
       setProjectData({ ...initialData, id: projectId || 'new' });
     }
@@ -119,6 +122,7 @@ const ProjectPlanning: React.FC = () => {
       signoffDate: '',
     },
     players: [],
+    issues: [],
   };
 
   const tabs = [
