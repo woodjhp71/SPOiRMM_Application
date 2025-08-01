@@ -53,18 +53,18 @@ const PlayersChartPage: React.FC = () => {
   const getPlayerColor = (role: Player['playerRole']) => {
     switch (role) {
       case 'Recipient of Benefit':
-        return 'fill-blue-500 stroke-blue-700';
+        return 'bg-blue-500 border-blue-700';
       case 'Provider of Benefit':
-        return 'fill-red-500 stroke-red-700';
+        return 'bg-red-500 border-red-700';
       case 'Cost Minimiser':
       case 'Benefit Maximiser':
-        return 'fill-green-500 stroke-green-700';
+        return 'bg-green-500 border-green-700';
       case 'Staff':
-        return 'fill-green-500 stroke-green-700';
+        return 'bg-green-500 border-green-700';
       case 'Supplier':
-        return 'fill-green-500 stroke-green-700';
+        return 'bg-green-500 border-green-700';
       default:
-        return 'fill-yellow-500 stroke-yellow-700';
+        return 'bg-yellow-500 border-yellow-700';
     }
   };
 
@@ -329,13 +329,13 @@ const PlayersChartPage: React.FC = () => {
                     onClick={() => handleNodeClick(player)}
                   >
                     {shape === 'circle' ? (
-                      <div className={`w-16 h-16 rounded-full ${color} shadow-lg flex items-center justify-center`}>
+                      <div className={`w-16 h-16 rounded-full ${color} border-2 shadow-lg flex items-center justify-center`}>
                         <span className="text-white text-xs font-medium text-center">
                           {player.playerName.split(' ').map(n => n[0]).join('').toUpperCase()}
                         </span>
                       </div>
                     ) : (
-                      <div className={`w-20 h-12 rounded-lg ${color} shadow-lg flex items-center justify-center`}>
+                      <div className={`w-20 h-12 rounded-lg ${color} border-2 shadow-lg flex items-center justify-center`}>
                         <span className="text-white text-xs font-medium text-center">
                           {player.playerName.split(' ').map(n => n[0]).join('').toUpperCase()}
                         </span>
