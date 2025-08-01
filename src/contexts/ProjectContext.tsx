@@ -1,0 +1,61 @@
+import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { Player } from '../components/PlayersChart/PlayersChart';
+import { ProjectPlanningData } from '../components/ProjectPlanning/ProjectPlanning';
+
+export interface ProjectData extends ProjectPlanningData {
+  id: string;
+}
+
+interface ProjectContextType {
+  projectData: ProjectData | null;
+  setProjectData: (data: ProjectData) => void;
+  updateProjectSection: (section: keyof ProjectData, data: any) => void;
+  updatePlayers: (players: Player[]) => void;
+}
+
+const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
+
+export const useProject = () => {
+  const context = useContext(ProjectContext);
+  if (context === undefined) {
+    throw new Error('useProject must be used within a ProjectProvider');
+  }
+  return context;
+};
+
+interface ProjectProviderProps {
+  children: ReactNode;
+}
+
+export const ProjectProvider: React.FC<ProjectProviderProps> = ({ children }) => {
+  const [projectData, setProjectData] = useState<ProjectData | null>(null);
+
+  const updateProjectSection = (section: keyof ProjectData, data: any) => {
+    if (projectData) {
+      setProjectData(prev => prev ? ({
+        ...prev,
+        [section]: { ...(prev[section] as any), ...data }
+      }) : null);
+    }
+  };
+
+  const updatePlayers = (players: Player[]) => {
+    if (projectData) {
+      setProjectData(prev => prev ? ({
+        ...prev,
+        players
+      }) : null);
+    }
+  };
+
+  return (
+    <ProjectContext.Provider value={{
+      projectData,
+      setProjectData,
+      updateProjectSection,
+      updatePlayers
+    }}>
+      {children}
+    </ProjectContext.Provider>
+  );
+}; 

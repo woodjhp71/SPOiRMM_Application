@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles for SPOiRMM */
+@layer base {
+  html {
+    font-family: system-ui, sans-serif;
+  }
+  
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #f9fafb;
+  }
+}
+
+@layer components {
+  .spoirmm-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
+  
+  .spoirmm-card {
+    @apply bg-white rounded-lg shadow-lg border border-gray-200;
+  }
+  
+  .spoirmm-button {
+    @apply px-4 py-2 rounded-md font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-200;
+  }
+  
+  .spoirmm-button-primary {
+    @apply spoirmm-button bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500;
+  }
+  
+  .spoirmm-button-secondary {
+    @apply spoirmm-button bg-gray-200 text-gray-700 hover:bg-gray-300 focus:ring-gray-500;
+  }
+} 
