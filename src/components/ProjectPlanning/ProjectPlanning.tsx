@@ -8,7 +8,6 @@ import PPDetails from './modules/PPDetails';
 import PPActionPlan from './modules/PPActionPlan';
 import PPWorkingGroups from './modules/PPWorkingGroups';
 import PPAssessment from './modules/PPAssessment';
-import PlayersChart from '../PlayersChart/PlayersChart';
 import IssuesList from '../IssuesList/IssuesList';
 import RiskRegister from '../RiskRegister/RiskRegister';
 import { Player } from '../PlayersChart/PlayersChart';
@@ -19,7 +18,6 @@ import {
   ClipboardDocumentListIcon,
   UserGroupIcon,
   ClipboardDocumentCheckIcon,
-  UsersIcon,
   ExclamationTriangleIcon,
   ChartBarIcon,
   ChevronRightIcon
@@ -99,9 +97,8 @@ const ProjectPlanning: React.FC = () => {
     if (tabParam === 'details') return 1;
     if (tabParam === 'action-plan') return 2;
     if (tabParam === 'assessment') return 4;
-    if (tabParam === 'players') return 5;
-    if (tabParam === 'issues') return 6;
-    if (tabParam === 'register') return 7;
+    if (tabParam === 'issues') return 5;
+    if (tabParam === 'register') return 6;
     return 0; // Default to first tab
   };
   
@@ -201,16 +198,6 @@ const ProjectPlanning: React.FC = () => {
       color: 'bg-yellow-500',
       status: 'New',
       description: 'Project evaluation and signoff'
-    },
-    {
-      id: 'players',
-      name: 'Players Chart',
-      component: PlayersChart,
-      dataKey: 'players',
-      icon: UsersIcon,
-      color: 'bg-indigo-500',
-      status: 'New',
-      description: 'Stakeholder mapping and roles'
     },
     {
       id: 'issues',
