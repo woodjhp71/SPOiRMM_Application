@@ -1,13 +1,18 @@
 
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ProjectPlanning from './components/ProjectPlanning/ProjectPlanning';
 import PlayersChart from './components/PlayersChart/PlayersChart';
 import IssuesList from './components/IssuesList/IssuesList';
 import RiskRegister from './components/RiskRegister/RiskRegister';
 import PlayersChartPage from './components/PlayersChartPage/PlayersChartPage';
-import UserDashboard from './components/UserDashboard/UserDashboard';
+
 import ProjectsList from './components/ProjectsList/ProjectsList';
+import Welcome from './components/Welcome';
+import Dashboard from './components/Dashboard';
+import Planning from './components/Planning';
+import ReportsPage from './components/ReportsPage';
+import AdminSettingsPage from './components/AdminSettingsPage';
 import { ProjectProvider } from './contexts/ProjectContext';
 
 function App() {
@@ -26,7 +31,11 @@ function App() {
         <Router>
           <div className="App">
             <Routes>
-              <Route path="/" element={<UserDashboard />} />
+              <Route path="/" element={<Welcome />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/planning" element={<Planning />} />
+              <Route path="/reports" element={<ReportsPage />} />
+              <Route path="/admin" element={<AdminSettingsPage />} />
               <Route path="/projects" element={<ProjectsList />} />
               <Route path="/projects/:projectId/planning" element={<ProjectPlanning />} />
               <Route path="/project/:id" element={<ProjectPlanning />} />
