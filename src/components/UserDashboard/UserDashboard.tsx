@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 // useProjectContext is available but not used in this component
 import { useProject } from '../../hooks/useProject';
 import ProjectCard from '../ProjectCard/ProjectCard';
@@ -44,11 +44,15 @@ interface ToolActivity {
 }
 
 const UserDashboard: React.FC = () => {
+  const navigate = useNavigate();
   // projectData is available from context but not used in this component
   const [userRole] = useState('Risk Plan Coordinator');
-  const [userName] = useState('Lisa Chen');
   const [userId] = useState('LC'); // Dynamic user ID - change this to test different users
   const { data: activeProjects, isLoading, error } = useActiveProjects();
+
+  const handleBackClick = () => {
+    navigate('/');
+  };
 
   // Role-based component visibility
   const isSponsor = userRole === 'Risk Plan Sponsor';
@@ -290,31 +294,29 @@ const UserDashboard: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div className="flex items-center space-x-4">
-              <div className="flex-shrink-0">
-                <h1 className="text-2xl font-bold text-gray-900">SPOiRMM</h1>
-              </div>
-              <div>
-                <h2 className="text-lg font-medium text-gray-900">
-                  Welcome back, {userName}
-                </h2>
-                <p className="text-sm text-gray-500">{userRole}</p>
-              </div>
+             <header 
+         className="bg-gradient-to-r from-slate-600 to-slate-700 text-white shadow-md"
+         role="banner"
+         aria-label="Application Header"
+       >
+        <div className="px-6 py-4">
+          <div className="flex justify-between items-center">
+            <div className="flex-shrink-0">
+              <h1 className="text-2xl font-bold text-white">SPOiRMM</h1>
             </div>
-            <div className="flex items-center space-x-4">
-              <button className="p-2 text-gray-400 hover:text-gray-500">
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-5 5-5-5h5v-12a1 1 0 012 0v12z" />
-                </svg>
-              </button>
-              <button className="p-2 text-gray-400 hover:text-gray-500">
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-              </button>
+            <div className="text-center flex-1">
+              <h2 className="text-2xl font-bold text-white">Risk Management Dashboard and Overview</h2>
+            </div>
+            <div className="flex-shrink-0">
+                             <button
+                 onClick={handleBackClick}
+                 className="p-2 text-white hover:text-slate-100 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 rounded-md transition-colors duration-200"
+                 aria-label="Return to main navigation"
+               >
+                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                 </svg>
+               </button>
             </div>
           </div>
         </div>
@@ -604,11 +606,25 @@ const UserDashboard: React.FC = () => {
               </div>
             </div>
 
-          </div>
-        </div>
-      </main>
-    </div>
-  );
-};
+                     </div>
+         </div>
+
+         {/* Back Button */}
+         <div className="text-center mt-8">
+           <button
+             onClick={handleBackClick}
+                            className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-slate-600 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 transition-colors duration-200"
+             aria-label="Return to main navigation"
+           >
+             <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+             </svg>
+             Back to Main Menu
+           </button>
+         </div>
+       </main>
+     </div>
+   );
+ };
 
 export default UserDashboard; 

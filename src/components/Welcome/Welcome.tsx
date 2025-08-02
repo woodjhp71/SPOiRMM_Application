@@ -1,6 +1,5 @@
 import React from 'react';
 import NavButton from './NavButton';
-import Header from '../Header';
 
 const Welcome: React.FC = () => {
   // Mock user data - in a real app this would come from authentication context
@@ -10,9 +9,22 @@ const Welcome: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <Header 
-        title="SPOiRMM Risk Management Platform"
-      />
+      <header 
+        className="bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-md"
+        role="banner"
+        aria-label="Application Header"
+      >
+        <div className="px-6 py-4">
+          <div className="flex justify-between items-center">
+            <div className="flex-shrink-0">
+              <h1 className="text-2xl font-bold text-white">SPOiRMM</h1>
+            </div>
+            <div className="text-center flex-1">
+              <h2 className="text-2xl font-bold text-white">Risk Management Platform Navigation</h2>
+            </div>
+          </div>
+        </div>
+      </header>
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -28,7 +40,7 @@ const Welcome: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
           <NavButton
             label="Dashboard"
-            color="blue"
+            color="slate"
             navigateTo="/dashboard"
             description="View your personalized dashboard with projects, action items, and key metrics"
           />
