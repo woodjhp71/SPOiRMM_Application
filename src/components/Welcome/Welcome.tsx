@@ -40,13 +40,13 @@ const Welcome: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
           <NavButton
             label="Dashboard"
-            color="slate"
+            color="cadet-blue"
             navigateTo="/dashboard"
             description="View your personalized dashboard with projects, action items, and key metrics"
           />
           <NavButton
             label="Planning"
-            color="blue"
+            color="denim-blue"
             navigateTo="/planning"
             description="Access project planning tools and risk assessment modules"
           />
@@ -55,6 +55,12 @@ const Welcome: React.FC = () => {
             color="teal"
             navigateTo="/reports"
             description="Generate and view comprehensive risk management reports"
+          />
+          <NavButton
+            label="Organization Setup"
+            color="charcoal"
+            navigateTo="/organization"
+            description="Manage enterprise-level data, departments, agreements, and policies"
           />
           <NavButton
             label="Admin / Settings"

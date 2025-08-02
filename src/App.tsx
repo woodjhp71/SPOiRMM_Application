@@ -14,6 +14,10 @@ import Planning from './components/Planning';
 import ReportsPage from './components/ReportsPage';
 import AdminSettingsPage from './components/AdminSettingsPage';
 import OrganizationSetup from './components/OrganizationSetup/OrganizationSetup';
+import DepartmentsPage from './components/OrganizationSetup/DepartmentsPage';
+import AgreementsPage from './components/OrganizationSetup/AgreementsPage';
+import PoliciesPage from './components/OrganizationSetup/PoliciesPage';
+import SettingsPage from './components/OrganizationSetup/SettingsPage';
 import { ProjectProvider } from './contexts/ProjectContext';
 
 function App() {
@@ -38,6 +42,10 @@ function App() {
               <Route path="/reports" element={<ReportsPage />} />
               <Route path="/admin" element={<AdminSettingsPage />} />
               <Route path="/organization" element={<OrganizationSetup />} />
+              <Route path="/organization/departments" element={<DepartmentsPage />} />
+              <Route path="/organization/agreements" element={<AgreementsPage />} />
+              <Route path="/organization/policies" element={<PoliciesPage />} />
+              <Route path="/organization/settings" element={<SettingsPage />} />
               <Route path="/projects" element={<ProjectsList />} />
               <Route path="/projects/:projectId/planning" element={<ProjectPlanning />} />
               <Route path="/project/:id" element={<ProjectPlanning />} />

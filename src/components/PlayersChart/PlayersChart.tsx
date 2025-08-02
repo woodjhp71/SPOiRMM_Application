@@ -23,6 +23,83 @@ export interface Player {
   notes?: string;
 }
 
+// Business logic functions for conditional filtering
+const getPlayerRoleOptions = (playerType: Player['playerType']): string[] => {
+  switch (playerType) {
+    case 'Recipient':
+      return ['Recipient of Benefit', 'Purchaser (Cost Minimiser)'];
+    case 'Provider':
+      return ['Provider of Benefit'];
+    case 'Staff':
+      return ['Staff Member (Benefit Enabler)'];
+    case 'Supplier':
+      return ['Supplier (Benefit Enabler)'];
+    case 'Benefit Maximiser':
+      return ['Clinician', 'Salesperson', 'Advisor'];
+    case 'Cost Minimiser':
+      return ['Purchaser', 'Broker', 'Insurer'];
+    case 'Regulator':
+      return ['Government Agency', 'Accreditation Body'];
+    case 'Representative':
+      return ['Union', 'Professional Association', 'Consumer Group'];
+    default:
+      return [];
+  }
+};
+
+const getEntityNatureOptions = (playerType: Player['playerType']): Player['entityNature'][] => {
+  switch (playerType) {
+    case 'Recipient':
+      return ['Individual', 'Organization'];
+    case 'Provider':
+    case 'Supplier':
+    case 'Cost Minimiser':
+    case 'Regulator':
+    case 'Representative':
+      return ['Organization'];
+    case 'Staff':
+    case 'Benefit Maximiser':
+      return ['Individual'];
+    default:
+      return ['Individual', 'Organization'];
+  }
+};
+
+const validatePlayerCombination = (playerType: Player['playerType'], playerRole: string, entityNature: Player['entityNature']): boolean => {
+  const validCombinations = [
+    // Recipient combinations
+    { type: 'Recipient', role: 'Recipient of Benefit', nature: 'Individual' },
+    { type: 'Recipient', role: 'Purchaser (Cost Minimiser)', nature: 'Organization' },
+    // Provider combinations
+    { type: 'Provider', role: 'Provider of Benefit', nature: 'Organization' },
+    // Staff combinations
+    { type: 'Staff', role: 'Staff Member (Benefit Enabler)', nature: 'Individual' },
+    // Supplier combinations
+    { type: 'Supplier', role: 'Supplier (Benefit Enabler)', nature: 'Organization' },
+    // Benefit Maximiser combinations
+    { type: 'Benefit Maximiser', role: 'Clinician', nature: 'Individual' },
+    { type: 'Benefit Maximiser', role: 'Salesperson', nature: 'Individual' },
+    { type: 'Benefit Maximiser', role: 'Advisor', nature: 'Individual' },
+    // Cost Minimiser combinations
+    { type: 'Cost Minimiser', role: 'Purchaser', nature: 'Organization' },
+    { type: 'Cost Minimiser', role: 'Broker', nature: 'Organization' },
+    { type: 'Cost Minimiser', role: 'Insurer', nature: 'Organization' },
+    // Regulator combinations
+    { type: 'Regulator', role: 'Government Agency', nature: 'Organization' },
+    { type: 'Regulator', role: 'Accreditation Body', nature: 'Organization' },
+    // Representative combinations
+    { type: 'Representative', role: 'Union', nature: 'Organization' },
+    { type: 'Representative', role: 'Professional Association', nature: 'Organization' },
+    { type: 'Representative', role: 'Consumer Group', nature: 'Organization' }
+  ];
+
+  return validCombinations.some(combo => 
+    combo.type === playerType && 
+    combo.role === playerRole && 
+    combo.nature === entityNature
+  );
+};
+
 const PlayersChart: React.FC = () => {
   const { id: projectId } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -47,6 +124,30 @@ const PlayersChart: React.FC = () => {
     notes: ''
   });
 
+  // Handle player type change - update role and nature options
+  const handlePlayerTypeChange = (playerType: Player['playerType']) => {
+    const roleOptions = getPlayerRoleOptions(playerType);
+    const natureOptions = getEntityNatureOptions(playerType);
+    
+    setNewPlayer(prev => ({
+      ...prev,
+      playerType,
+      playerRole: roleOptions[0] || '',
+      entityNature: natureOptions[0] || 'Individual'
+    }));
+  };
+
+  // Handle edit player type change
+  const handleEditPlayerTypeChange = (playerType: Player['playerType']) => {
+    const roleOptions = getPlayerRoleOptions(playerType);
+    const natureOptions = getEntityNatureOptions(playerType);
+    
+    setEditingPlayer(prev => prev ? {
+      ...prev,
+      playerType,
+      playerRole: roleOptions[0] || '',
+      entityNature: natureOptions[0] || 'Individual'
+    } : null);
   // Business logic for conditional dropdowns
   const getPlayerRoleOptions = (playerType: Player['playerType']): string[] => {
     switch (playerType) {
@@ -114,6 +215,7 @@ const PlayersChart: React.FC = () => {
       combo.role === playerRole && 
       combo.nature === entityNature
     );
+
   };
 
   // Mock risk register data for demonstration
@@ -138,7 +240,7 @@ const PlayersChart: React.FC = () => {
       case 'Benefit Maximiser': return 'bg-purple-100 text-purple-800 border-purple-200';
       case 'Cost Minimiser': return 'bg-orange-100 text-orange-800 border-orange-200';
       case 'Regulator': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'Representative': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case 'Representative': return 'bg-indigo-100 text-indigo-800 border-indigo-200';
       default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
@@ -179,6 +281,13 @@ const PlayersChart: React.FC = () => {
 
     if (isDuplicate) {
       errors.playerName = 'A player with this name, role, and nature already exists';
+    }
+
+    // Validate business rule combinations
+    if (player.playerType && player.playerRole && player.entityNature) {
+      if (!validatePlayerCombination(player.playerType, player.playerRole, player.entityNature)) {
+        errors.combination = 'Invalid combination of Player Type, Role, and Entity Nature';
+      }
     }
 
     return errors;
@@ -389,6 +498,7 @@ const PlayersChart: React.FC = () => {
                   </label>
                   <select
                     value={newPlayer.playerType}
+                    onChange={(e) => handlePlayerTypeChange(e.target.value as Player['playerType'])}
                     onChange={(e) => {
                       const newType = e.target.value as Player['playerType'];
                       const availableRoles = getPlayerRoleOptions(newType);
@@ -443,6 +553,12 @@ const PlayersChart: React.FC = () => {
                     ))}
                   </select>
                 </div>
+
+                {errors.combination && (
+                  <div className="md:col-span-2">
+                    <p className="text-red-500 text-sm mt-1">{errors.combination}</p>
+                  </div>
+                )}
 
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -643,8 +759,12 @@ const PlayersChart: React.FC = () => {
               <div className="flex space-x-4 text-sm text-gray-600">
                 <span>Recipients: {players.filter(p => p.playerType === 'Recipient').length}</span>
                 <span>Providers: {players.filter(p => p.playerType === 'Provider').length}</span>
+                <span>Staff: {players.filter(p => p.playerType === 'Staff').length}</span>
                 <span>Suppliers: {players.filter(p => p.playerType === 'Supplier').length}</span>
+                <span>Benefit Maximisers: {players.filter(p => p.playerType === 'Benefit Maximiser').length}</span>
+                <span>Cost Minimisers: {players.filter(p => p.playerType === 'Cost Minimiser').length}</span>
                 <span>Regulators: {players.filter(p => p.playerType === 'Regulator').length}</span>
+                <span>Representatives: {players.filter(p => p.playerType === 'Representative').length}</span>
               </div>
             </div>
           </div>
@@ -681,12 +801,15 @@ const PlayersChart: React.FC = () => {
                   </label>
                   <select
                     value={editingPlayer.playerType}
-                    onChange={(e) => setEditingPlayer({ ...editingPlayer, playerType: e.target.value as Player['playerType'] })}
+                    onChange={(e) => handleEditPlayerTypeChange(e.target.value as Player['playerType'])}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option value="Recipient">Recipient</option>
                     <option value="Provider">Provider</option>
+                    <option value="Staff">Staff</option>
                     <option value="Supplier">Supplier</option>
+                    <option value="Benefit Maximiser">Benefit Maximiser</option>
+                    <option value="Cost Minimiser">Cost Minimiser</option>
                     <option value="Regulator">Regulator</option>
                     <option value="Representative">Representative</option>
                   </select>
@@ -698,15 +821,12 @@ const PlayersChart: React.FC = () => {
                   </label>
                   <select
                     value={editingPlayer.playerRole}
-                    onChange={(e) => setEditingPlayer({ ...editingPlayer, playerRole: e.target.value as Player['playerRole'] })}
+                    onChange={(e) => setEditingPlayer({ ...editingPlayer, playerRole: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
-                    <option value="Recipient of Benefit">Recipient of Benefit</option>
-                    <option value="Provider of Benefit">Provider of Benefit</option>
-                    <option value="Cost Minimiser">Cost Minimiser</option>
-                    <option value="Benefit Maximiser">Benefit Maximiser</option>
-                    <option value="Staff">Staff</option>
-                    <option value="Supplier">Supplier</option>
+                    {getPlayerRoleOptions(editingPlayer.playerType).map(role => (
+                      <option key={role} value={role}>{role}</option>
+                    ))}
                   </select>
                 </div>
 
@@ -719,10 +839,17 @@ const PlayersChart: React.FC = () => {
                     onChange={(e) => setEditingPlayer({ ...editingPlayer, entityNature: e.target.value as Player['entityNature'] })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
-                    <option value="Individual">Individual</option>
-                    <option value="Organisation">Organisation</option>
+                    {getEntityNatureOptions(editingPlayer.playerType).map(nature => (
+                      <option key={nature} value={nature}>{nature}</option>
+                    ))}
                   </select>
                 </div>
+
+                {errors.combination && (
+                  <div className="md:col-span-2">
+                    <p className="text-red-500 text-sm mt-1">{errors.combination}</p>
+                  </div>
+                )}
 
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
