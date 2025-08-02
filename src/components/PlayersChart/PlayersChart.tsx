@@ -148,6 +148,74 @@ const PlayersChart: React.FC = () => {
       playerRole: roleOptions[0] || '',
       entityNature: natureOptions[0] || 'Individual'
     } : null);
+  // Business logic for conditional dropdowns
+  const getPlayerRoleOptions = (playerType: Player['playerType']): string[] => {
+    switch (playerType) {
+      case 'Recipient':
+        return ['Recipient of Benefit', 'Purchaser (Cost Minimiser)'];
+      case 'Provider':
+        return ['Provider of Benefit'];
+      case 'Staff':
+        return ['Staff Member (Benefit Enabler)'];
+      case 'Supplier':
+        return ['Supplier (Benefit Enabler)'];
+      case 'Benefit Maximiser':
+        return ['Clinician', 'Salesperson', 'Advisor'];
+      case 'Cost Minimiser':
+        return ['Purchaser', 'Broker', 'Insurer'];
+      case 'Regulator':
+        return ['Government Agency', 'Accreditation Body'];
+      case 'Representative':
+        return ['Union', 'Professional Association', 'Consumer Group'];
+      default:
+        return [];
+    }
+  };
+
+  const getEntityNatureOptions = (playerType: Player['playerType']): Player['entityNature'][] => {
+    switch (playerType) {
+      case 'Recipient':
+        return ['Individual', 'Organization'];
+      case 'Provider':
+      case 'Supplier':
+      case 'Cost Minimiser':
+      case 'Regulator':
+      case 'Representative':
+        return ['Organization'];
+      case 'Staff':
+      case 'Benefit Maximiser':
+        return ['Individual'];
+      default:
+        return ['Individual', 'Organization'];
+    }
+  };
+
+  const validatePlayerCombination = (playerType: Player['playerType'], playerRole: string, entityNature: Player['entityNature']): boolean => {
+    const validCombinations = [
+      { type: 'Recipient', role: 'Recipient of Benefit', nature: 'Individual' },
+      { type: 'Recipient', role: 'Purchaser (Cost Minimiser)', nature: 'Organization' },
+      { type: 'Provider', role: 'Provider of Benefit', nature: 'Organization' },
+      { type: 'Staff', role: 'Staff Member (Benefit Enabler)', nature: 'Individual' },
+      { type: 'Supplier', role: 'Supplier (Benefit Enabler)', nature: 'Organization' },
+      { type: 'Benefit Maximiser', role: 'Clinician', nature: 'Individual' },
+      { type: 'Benefit Maximiser', role: 'Salesperson', nature: 'Individual' },
+      { type: 'Benefit Maximiser', role: 'Advisor', nature: 'Individual' },
+      { type: 'Cost Minimiser', role: 'Purchaser', nature: 'Organization' },
+      { type: 'Cost Minimiser', role: 'Broker', nature: 'Organization' },
+      { type: 'Cost Minimiser', role: 'Insurer', nature: 'Organization' },
+      { type: 'Regulator', role: 'Government Agency', nature: 'Organization' },
+      { type: 'Regulator', role: 'Accreditation Body', nature: 'Organization' },
+      { type: 'Representative', role: 'Union', nature: 'Organization' },
+      { type: 'Representative', role: 'Professional Association', nature: 'Organization' },
+      { type: 'Representative', role: 'Consumer Group', nature: 'Organization' }
+    ];
+
+    return validCombinations.some(combo => 
+      combo.type === playerType && 
+      combo.role === playerRole && 
+      combo.nature === entityNature
+    );
+
   };
 
   // Mock risk register data for demonstration
@@ -194,6 +262,13 @@ const PlayersChart: React.FC = () => {
 
     if (!player.playerName?.trim()) {
       errors.playerName = 'Player Name is required';
+    }
+
+    // Validate business logic combinations
+    if (player.playerType && player.playerRole && player.entityNature) {
+      if (!validatePlayerCombination(player.playerType, player.playerRole, player.entityNature)) {
+        errors.combination = 'Invalid combination of Player Type, Role, and Entity Nature. Please check the business rules.';
+      }
     }
 
     // Check for uniqueness: Player Name + Role + Nature
@@ -411,6 +486,12 @@ const PlayersChart: React.FC = () => {
                   )}
                 </div>
 
+                {errors.combination && (
+                  <div className="md:col-span-3">
+                    <p className="text-red-500 text-sm mt-1">{errors.combination}</p>
+                  </div>
+                )}
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Player Type *
@@ -418,6 +499,18 @@ const PlayersChart: React.FC = () => {
                   <select
                     value={newPlayer.playerType}
                     onChange={(e) => handlePlayerTypeChange(e.target.value as Player['playerType'])}
+                    onChange={(e) => {
+                      const newType = e.target.value as Player['playerType'];
+                      const availableRoles = getPlayerRoleOptions(newType);
+                      const availableNatures = getEntityNatureOptions(newType);
+                      
+                      setNewPlayer({ 
+                        ...newPlayer, 
+                        playerType: newType,
+                        playerRole: availableRoles[0] || '',
+                        entityNature: availableNatures[0] || 'Individual'
+                      });
+                    }}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option value="Recipient">Recipient</option>
