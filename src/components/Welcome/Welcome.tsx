@@ -4,7 +4,7 @@ import NavButton from './NavButton';
 const Welcome: React.FC = () => {
   // Mock user data - in a real app this would come from authentication context
   const userName = 'Lisa Chen';
-  const userRole = 'Risk Plan Coordinator';
+  const userRole = 'Risk Plan Coordinator' as const;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -62,6 +62,14 @@ const Welcome: React.FC = () => {
             navigateTo="/admin"
             description="Manage system settings, user permissions, and administrative functions"
           />
+          {(['Admin', 'Risk Plan Coordinator'] as const).includes(userRole) && (
+            <NavButton
+              label="Organization Setup"
+              color="indigo"
+              navigateTo="/organization"
+              description="Manage enterprise-level data, departments, agreements, and policies"
+            />
+          )}
         </div>
 
         {/* Footer Info */}

@@ -13,6 +13,7 @@ import Dashboard from './components/Dashboard';
 import Planning from './components/Planning';
 import ReportsPage from './components/ReportsPage';
 import AdminSettingsPage from './components/AdminSettingsPage';
+import OrganizationSetup from './components/OrganizationSetup/OrganizationSetup';
 import { ProjectProvider } from './contexts/ProjectContext';
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
               <Route path="/planning" element={<Planning />} />
               <Route path="/reports" element={<ReportsPage />} />
               <Route path="/admin" element={<AdminSettingsPage />} />
+              <Route path="/organization" element={<OrganizationSetup />} />
               <Route path="/projects" element={<ProjectsList />} />
               <Route path="/projects/:projectId/planning" element={<ProjectPlanning />} />
               <Route path="/project/:id" element={<ProjectPlanning />} />
