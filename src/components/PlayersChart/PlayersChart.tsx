@@ -15,9 +15,9 @@ import {
 export interface Player {
   id: string;
   playerName: string;
-  playerType: 'Recipient' | 'Provider' | 'Supplier' | 'Regulator' | 'Representative';
-  playerRole: 'Recipient of Benefit' | 'Provider of Benefit' | 'Cost Minimiser' | 'Benefit Maximiser' | 'Staff' | 'Supplier';
-  entityNature: 'Individual' | 'Organisation';
+  playerType: 'Recipient' | 'Provider' | 'Staff' | 'Supplier' | 'Benefit Maximiser' | 'Cost Minimiser' | 'Regulator' | 'Representative';
+  playerRole: string;
+  entityNature: 'Individual' | 'Organization';
   relationshipToProject?: string;
   riskImpacted?: string[];
   notes?: string;
@@ -47,6 +47,75 @@ const PlayersChart: React.FC = () => {
     notes: ''
   });
 
+  // Business logic for conditional dropdowns
+  const getPlayerRoleOptions = (playerType: Player['playerType']): string[] => {
+    switch (playerType) {
+      case 'Recipient':
+        return ['Recipient of Benefit', 'Purchaser (Cost Minimiser)'];
+      case 'Provider':
+        return ['Provider of Benefit'];
+      case 'Staff':
+        return ['Staff Member (Benefit Enabler)'];
+      case 'Supplier':
+        return ['Supplier (Benefit Enabler)'];
+      case 'Benefit Maximiser':
+        return ['Clinician', 'Salesperson', 'Advisor'];
+      case 'Cost Minimiser':
+        return ['Purchaser', 'Broker', 'Insurer'];
+      case 'Regulator':
+        return ['Government Agency', 'Accreditation Body'];
+      case 'Representative':
+        return ['Union', 'Professional Association', 'Consumer Group'];
+      default:
+        return [];
+    }
+  };
+
+  const getEntityNatureOptions = (playerType: Player['playerType']): Player['entityNature'][] => {
+    switch (playerType) {
+      case 'Recipient':
+        return ['Individual', 'Organization'];
+      case 'Provider':
+      case 'Supplier':
+      case 'Cost Minimiser':
+      case 'Regulator':
+      case 'Representative':
+        return ['Organization'];
+      case 'Staff':
+      case 'Benefit Maximiser':
+        return ['Individual'];
+      default:
+        return ['Individual', 'Organization'];
+    }
+  };
+
+  const validatePlayerCombination = (playerType: Player['playerType'], playerRole: string, entityNature: Player['entityNature']): boolean => {
+    const validCombinations = [
+      { type: 'Recipient', role: 'Recipient of Benefit', nature: 'Individual' },
+      { type: 'Recipient', role: 'Purchaser (Cost Minimiser)', nature: 'Organization' },
+      { type: 'Provider', role: 'Provider of Benefit', nature: 'Organization' },
+      { type: 'Staff', role: 'Staff Member (Benefit Enabler)', nature: 'Individual' },
+      { type: 'Supplier', role: 'Supplier (Benefit Enabler)', nature: 'Organization' },
+      { type: 'Benefit Maximiser', role: 'Clinician', nature: 'Individual' },
+      { type: 'Benefit Maximiser', role: 'Salesperson', nature: 'Individual' },
+      { type: 'Benefit Maximiser', role: 'Advisor', nature: 'Individual' },
+      { type: 'Cost Minimiser', role: 'Purchaser', nature: 'Organization' },
+      { type: 'Cost Minimiser', role: 'Broker', nature: 'Organization' },
+      { type: 'Cost Minimiser', role: 'Insurer', nature: 'Organization' },
+      { type: 'Regulator', role: 'Government Agency', nature: 'Organization' },
+      { type: 'Regulator', role: 'Accreditation Body', nature: 'Organization' },
+      { type: 'Representative', role: 'Union', nature: 'Organization' },
+      { type: 'Representative', role: 'Professional Association', nature: 'Organization' },
+      { type: 'Representative', role: 'Consumer Group', nature: 'Organization' }
+    ];
+
+    return validCombinations.some(combo => 
+      combo.type === playerType && 
+      combo.role === playerRole && 
+      combo.nature === entityNature
+    );
+  };
+
   // Mock risk register data for demonstration
   const mockRiskRegister = [
     { id: 'R001', title: 'Regulatory Compliance Risk' },
@@ -64,7 +133,10 @@ const PlayersChart: React.FC = () => {
     switch (type) {
       case 'Recipient': return 'bg-blue-100 text-blue-800 border-blue-200';
       case 'Provider': return 'bg-red-100 text-red-800 border-red-200';
-      case 'Supplier': return 'bg-green-100 text-green-800 border-green-200';
+      case 'Staff': return 'bg-green-100 text-green-800 border-green-200';
+      case 'Supplier': return 'bg-teal-100 text-teal-800 border-teal-200';
+      case 'Benefit Maximiser': return 'bg-purple-100 text-purple-800 border-purple-200';
+      case 'Cost Minimiser': return 'bg-orange-100 text-orange-800 border-orange-200';
       case 'Regulator': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
       case 'Representative': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
       default: return 'bg-gray-100 text-gray-800 border-gray-200';
@@ -88,6 +160,13 @@ const PlayersChart: React.FC = () => {
 
     if (!player.playerName?.trim()) {
       errors.playerName = 'Player Name is required';
+    }
+
+    // Validate business logic combinations
+    if (player.playerType && player.playerRole && player.entityNature) {
+      if (!validatePlayerCombination(player.playerType, player.playerRole, player.entityNature)) {
+        errors.combination = 'Invalid combination of Player Type, Role, and Entity Nature. Please check the business rules.';
+      }
     }
 
     // Check for uniqueness: Player Name + Role + Nature
@@ -230,7 +309,10 @@ const PlayersChart: React.FC = () => {
                 <option value="all">All Types</option>
                 <option value="Recipient">Recipient</option>
                 <option value="Provider">Provider</option>
+                <option value="Staff">Staff</option>
                 <option value="Supplier">Supplier</option>
+                <option value="Benefit Maximiser">Benefit Maximiser</option>
+                <option value="Cost Minimiser">Cost Minimiser</option>
                 <option value="Regulator">Regulator</option>
                 <option value="Representative">Representative</option>
               </select>
@@ -243,11 +325,21 @@ const PlayersChart: React.FC = () => {
               >
                 <option value="all">All Roles</option>
                 <option value="Recipient of Benefit">Recipient of Benefit</option>
+                <option value="Purchaser (Cost Minimiser)">Purchaser (Cost Minimiser)</option>
                 <option value="Provider of Benefit">Provider of Benefit</option>
-                <option value="Cost Minimiser">Cost Minimiser</option>
-                <option value="Benefit Maximiser">Benefit Maximiser</option>
-                <option value="Staff">Staff</option>
-                <option value="Supplier">Supplier</option>
+                <option value="Staff Member (Benefit Enabler)">Staff Member (Benefit Enabler)</option>
+                <option value="Supplier (Benefit Enabler)">Supplier (Benefit Enabler)</option>
+                <option value="Clinician">Clinician</option>
+                <option value="Salesperson">Salesperson</option>
+                <option value="Advisor">Advisor</option>
+                <option value="Purchaser">Purchaser</option>
+                <option value="Broker">Broker</option>
+                <option value="Insurer">Insurer</option>
+                <option value="Government Agency">Government Agency</option>
+                <option value="Accreditation Body">Accreditation Body</option>
+                <option value="Union">Union</option>
+                <option value="Professional Association">Professional Association</option>
+                <option value="Consumer Group">Consumer Group</option>
               </select>
 
               {/* Nature Filter */}
@@ -258,7 +350,7 @@ const PlayersChart: React.FC = () => {
               >
                 <option value="all">All Natures</option>
                 <option value="Individual">Individual</option>
-                <option value="Organisation">Organisation</option>
+                <option value="Organization">Organization</option>
               </select>
             </div>
           </div>
@@ -285,18 +377,38 @@ const PlayersChart: React.FC = () => {
                   )}
                 </div>
 
+                {errors.combination && (
+                  <div className="md:col-span-3">
+                    <p className="text-red-500 text-sm mt-1">{errors.combination}</p>
+                  </div>
+                )}
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Player Type *
                   </label>
                   <select
                     value={newPlayer.playerType}
-                    onChange={(e) => setNewPlayer({ ...newPlayer, playerType: e.target.value as Player['playerType'] })}
+                    onChange={(e) => {
+                      const newType = e.target.value as Player['playerType'];
+                      const availableRoles = getPlayerRoleOptions(newType);
+                      const availableNatures = getEntityNatureOptions(newType);
+                      
+                      setNewPlayer({ 
+                        ...newPlayer, 
+                        playerType: newType,
+                        playerRole: availableRoles[0] || '',
+                        entityNature: availableNatures[0] || 'Individual'
+                      });
+                    }}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option value="Recipient">Recipient</option>
                     <option value="Provider">Provider</option>
+                    <option value="Staff">Staff</option>
                     <option value="Supplier">Supplier</option>
+                    <option value="Benefit Maximiser">Benefit Maximiser</option>
+                    <option value="Cost Minimiser">Cost Minimiser</option>
                     <option value="Regulator">Regulator</option>
                     <option value="Representative">Representative</option>
                   </select>
@@ -308,15 +420,12 @@ const PlayersChart: React.FC = () => {
                   </label>
                   <select
                     value={newPlayer.playerRole}
-                    onChange={(e) => setNewPlayer({ ...newPlayer, playerRole: e.target.value as Player['playerRole'] })}
+                    onChange={(e) => setNewPlayer({ ...newPlayer, playerRole: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
-                    <option value="Recipient of Benefit">Recipient of Benefit</option>
-                    <option value="Provider of Benefit">Provider of Benefit</option>
-                    <option value="Cost Minimiser">Cost Minimiser</option>
-                    <option value="Benefit Maximiser">Benefit Maximiser</option>
-                    <option value="Staff">Staff</option>
-                    <option value="Supplier">Supplier</option>
+                    {getPlayerRoleOptions(newPlayer.playerType || 'Recipient').map(role => (
+                      <option key={role} value={role}>{role}</option>
+                    ))}
                   </select>
                 </div>
 
@@ -329,8 +438,9 @@ const PlayersChart: React.FC = () => {
                     onChange={(e) => setNewPlayer({ ...newPlayer, entityNature: e.target.value as Player['entityNature'] })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
-                    <option value="Individual">Individual</option>
-                    <option value="Organisation">Organisation</option>
+                    {getEntityNatureOptions(newPlayer.playerType || 'Recipient').map(nature => (
+                      <option key={nature} value={nature}>{nature}</option>
+                    ))}
                   </select>
                 </div>
 
