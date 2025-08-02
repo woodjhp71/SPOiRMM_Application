@@ -294,11 +294,11 @@ const UserDashboard: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-             <header 
-         className="bg-gradient-to-r from-slate-600 to-slate-700 text-white shadow-md"
-         role="banner"
-         aria-label="Application Header"
-       >
+                           <header
+                className="bg-gradient-to-r from-sky-600 to-sky-700 text-white shadow-md"
+                role="banner"
+                aria-label="Application Header"
+              >
         <div className="px-6 py-4">
           <div className="flex justify-between items-center">
             <div className="flex-shrink-0">
@@ -310,7 +310,7 @@ const UserDashboard: React.FC = () => {
             <div className="flex-shrink-0">
                              <button
                  onClick={handleBackClick}
-                 className="p-2 text-white hover:text-slate-100 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 rounded-md transition-colors duration-200"
+                                         className="p-2 text-white hover:text-sky-100 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 rounded-md transition-colors duration-200"
                  aria-label="Return to main navigation"
                >
                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
