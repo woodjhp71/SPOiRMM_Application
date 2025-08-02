@@ -79,9 +79,11 @@ interface NavigationItem {
   status: 'New' | 'In Progress' | 'Completed';
   description: string;
 }
+
   issues: Issue[];
   risks: Risk[];
 }
+
 
 const ProjectPlanning: React.FC = () => {
   const { projectId } = useParams<{ projectId: string }>();
