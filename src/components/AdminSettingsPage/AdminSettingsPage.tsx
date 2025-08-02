@@ -122,6 +122,13 @@ const AdminSettingsPage: React.FC = () => {
             </svg>
             Back to Main Menu
           </button>
+
+          {/* Footer Info */}
+          <div className="mt-12 text-center">
+            <p className="text-sm text-gray-500">
+              SPOiRMM - Strategic Planning of Integrated Risk Management Model
+            </p>
+          </div>
         </div>
       </main>
     </div>
