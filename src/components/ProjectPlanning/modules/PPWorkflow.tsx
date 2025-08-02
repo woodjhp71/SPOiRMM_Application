@@ -5,7 +5,9 @@ import {
   UsersIcon,
   ExclamationTriangleIcon,
   DocumentTextIcon,
-  ChartBarIcon
+  ChartBarIcon,
+  BuildingOfficeIcon,
+  CogIcon
 } from '@heroicons/react/24/outline';
 
 interface PPWorkflowProps {
@@ -19,24 +21,6 @@ const PPWorkflow: React.FC<PPWorkflowProps> = () => {
   const { id: projectId } = useParams<{ id: string }>();
   
   const workflowSteps = [
-                    {
-                  id: 'players',
-                  name: 'Players Chart',
-                  description: 'Stakeholder overview and role mapping',
-                  icon: UsersIcon,
-                  color: 'bg-blue-500',
-                  status: 'pending',
-                  route: `/project/${projectId}/players`
-                },
-                {
-                  id: 'players-chart',
-                  name: 'Players Chart Visualizer',
-                  description: 'Interactive stakeholder mapping and analysis',
-                  icon: UsersIcon,
-                  color: 'bg-purple-500',
-                  status: 'pending',
-                  route: `/project/${projectId}/players-chart`
-                },
     {
       id: 'issues',
       name: 'Issues List',
@@ -66,6 +50,29 @@ const PPWorkflow: React.FC<PPWorkflowProps> = () => {
     }
   ];
 
+  const integrationLinks = [
+    {
+      id: 'players-chart',
+      name: 'Players Chart',
+      description: 'Organization-level stakeholder overview and role mapping',
+      icon: UsersIcon,
+      color: 'bg-blue-500',
+      status: 'read-only',
+      route: '/organization',
+      isExternal: true
+    },
+    {
+      id: 'organization-setup',
+      name: 'Organization Setup',
+      description: 'Internal departments and structures',
+      icon: BuildingOfficeIcon,
+      color: 'bg-indigo-500',
+      status: 'read-only',
+      route: '/organization',
+      isExternal: true
+    }
+  ];
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'active':
@@ -74,6 +81,8 @@ const PPWorkflow: React.FC<PPWorkflowProps> = () => {
         return 'bg-green-100 text-green-800 border-green-200';
       case 'pending':
         return 'bg-gray-100 text-gray-600 border-gray-200';
+      case 'read-only':
+        return 'bg-gray-50 text-gray-500 border-gray-100';
       default:
         return 'bg-gray-100 text-gray-600 border-gray-200';
     }
@@ -89,7 +98,7 @@ const PPWorkflow: React.FC<PPWorkflowProps> = () => {
           Navigate through the integrated risk management workflow. Each step builds upon the previous to create a comprehensive risk management framework.
         </p>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {workflowSteps.map((step, index) => (
             <div key={step.id} className="relative">
               <div 
@@ -128,31 +137,57 @@ const PPWorkflow: React.FC<PPWorkflowProps> = () => {
         </div>
       </div>
 
+      {/* Integration Section */}
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+        <h3 className="text-lg font-semibold text-blue-800 mb-4">
+          Organization-Level Integrations
+        </h3>
+        <p className="text-blue-700 mb-6">
+          Reference organization-level data and structures. These components provide read-only context for project planning.
+        </p>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {integrationLinks.map((link) => (
+            <div key={link.id} className="relative">
+              <div 
+                className={`
+                  p-4 rounded-lg border-2 transition-all duration-200
+                  ${getStatusColor(link.status)}
+                `}
+                onClick={() => navigate(link.route)}
+              >
+                <div className="flex items-center space-x-3">
+                  <div className={`p-2 rounded-lg ${link.color} text-white`}>
+                    <link.icon className="h-5 w-5" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-medium text-sm">{link.name}</h3>
+                    <p className="text-xs opacity-75 mt-1">{link.description}</p>
+                  </div>
+                </div>
+                
+                <div className="absolute -top-2 -right-2">
+                  <div className="bg-gray-500 text-white text-xs px-2 py-1 rounded-full">
+                    Read-Only
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <div className="bg-white border border-gray-200 rounded-lg p-6">
         <h3 className="text-lg font-medium text-gray-900 mb-4">
           Quick Actions
         </h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <button
-                        onClick={() => navigate(`/project/${projectId}/players`)}
-                        className="flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                      >
-                        <UsersIcon className="h-4 w-4 mr-2" />
-                        Go to Players
-                      </button>
-                      <button
-                        onClick={() => navigate(`/project/${projectId}/players-chart`)}
-                        className="flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
-                      >
-                        <UsersIcon className="h-4 w-4 mr-2" />
-                        Go to Visualizer
-                      </button>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <button 
             onClick={() => navigate(`/project/${projectId}/issues`)}
             className="flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
           >
             <ExclamationTriangleIcon className="h-4 w-4 mr-2" />
-            Go to Issues
+            Go to Issues List
           </button>
           <button 
             onClick={() => navigate(`/project/${projectId}/register`)}
@@ -177,6 +212,28 @@ const PPWorkflow: React.FC<PPWorkflowProps> = () => {
               <p>
                 Complete each module in sequence to ensure proper risk management framework development. 
                 The current Project Planning module should be completed before proceeding to the Risk Register.
+                Player role context is sourced from the organization level and is read-only within project planning.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <div className="flex">
+          <div className="flex-shrink-0">
+            <CogIcon className="h-5 w-5 text-blue-400" />
+          </div>
+          <div className="ml-3">
+            <h3 className="text-sm font-medium text-blue-800">
+              Integration Notes
+            </h3>
+            <div className="mt-2 text-sm text-blue-700">
+              <p>
+                • Players Chart provides stakeholder context from the organization level<br/>
+                • Organization Setup contains internal departments and structures<br/>
+                • All organizational data is read-only within project planning<br/>
+                • Issues List and Risk Register can be launched and linked directly
               </p>
             </div>
           </div>
