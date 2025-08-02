@@ -21,7 +21,7 @@ interface VisualPlayer extends Player {
 const PlayersChartPage: React.FC = () => {
   const { id: projectId } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { projectData } = useProject();
+  const { } = useProject();
   const canvasRef = useRef<HTMLDivElement>(null);
   const [visualPlayers, setVisualPlayers] = useState<VisualPlayer[]>([]);
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
@@ -39,16 +39,9 @@ const PlayersChartPage: React.FC = () => {
 
   // Initialize visual players from project data
   useEffect(() => {
-    if (projectData?.players) {
-      const initialVisualPlayers: VisualPlayer[] = projectData.players.map((player, index) => ({
-        ...player,
-        x: 100 + (index * 150) % 800,
-        y: 100 + Math.floor(index / 5) * 120,
-        isDragging: false
-      }));
-      setVisualPlayers(initialVisualPlayers);
-    }
-  }, [projectData?.players]);
+    // Initialize with empty array since players are now managed at organization level
+    setVisualPlayers([]);
+  }, []);
 
   const getPlayerColor = (role: Player['playerRole']) => {
     switch (role) {
