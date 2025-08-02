@@ -8,7 +8,6 @@ import PPDetails from './modules/PPDetails';
 import PPActionPlan from './modules/PPActionPlan';
 import PPWorkingGroups from './modules/PPWorkingGroups';
 import PPAssessment from './modules/PPAssessment';
-import { Player } from '../PlayersChart/PlayersChart';
 import { Issue } from '../IssuesList/IssuesList';
 import { Risk } from '../RiskRegister/RiskRegister';
 
@@ -51,10 +50,9 @@ export interface ProjectPlanningData {
     projectManagerSignoff: boolean;
     signoffDate: string;
   };
-                players: Player[];
-              issues: Issue[];
-              risks: Risk[];
-            }
+  issues: Issue[];
+  risks: Risk[];
+}
 
 const ProjectPlanning: React.FC = () => {
   const { projectId } = useParams<{ projectId: string }>();
@@ -119,7 +117,6 @@ const ProjectPlanning: React.FC = () => {
       projectManagerSignoff: false,
       signoffDate: '',
     },
-    players: [],
     issues: [],
     risks: [],
   };
@@ -167,11 +164,11 @@ const ProjectPlanning: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-                           <header
-                className="bg-gradient-to-r from-indigo-700 to-indigo-800 text-white shadow-md"
-                role="banner"
-                aria-label="Application Header"
-              >
+      <header
+        className="bg-gradient-to-r from-indigo-700 to-indigo-800 text-white shadow-md"
+        role="banner"
+        aria-label="Application Header"
+      >
         <div className="px-6 py-4">
           <div className="flex justify-between items-center">
             <div className="flex-shrink-0">
@@ -183,7 +180,7 @@ const ProjectPlanning: React.FC = () => {
             <div className="flex-shrink-0">
               <button
                 onClick={handleBackClick}
-                                 className="p-2 text-white hover:text-indigo-100 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 rounded-md transition-colors duration-200"
+                className="p-2 text-white hover:text-indigo-100 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 rounded-md transition-colors duration-200"
                 aria-label="Return to main navigation"
               >
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -74,7 +74,6 @@ const fetchProject = async (projectId: string): Promise<FullProjectData> => {
         projectManagerSignoff: false,
         signoffDate: ''
       },
-      players: [],
       issues: [],
       risks: []
     },
@@ -98,138 +97,119 @@ const fetchProject = async (projectId: string): Promise<FullProjectData> => {
         approvalDate: '',
         projectDescription: 'Assessment of operational risks across business units',
         whyNeeded: 'To identify and mitigate operational risks in daily operations',
-        objectives: 'Complete risk assessment for all operational processes'
+        objectives: 'Implement operational risk controls within 6 months'
       },
       actionPlan: [
         {
           id: '1',
           taskNumber: 1,
-          description: 'Define assessment scope and criteria',
+          description: 'Map operational processes',
           assignedTo: 'Mike Wilson',
-          dueDate: '2024-02-28',
+          dueDate: '2024-03-01',
           status: 'New',
-          notes: 'Need to establish assessment framework'
-        },
-        {
-          id: '2',
-          taskNumber: 2,
-          description: 'Conduct process mapping exercise',
-          assignedTo: 'Sarah Johnson',
-          dueDate: '2024-03-15',
-          status: 'New',
-          notes: 'Map all operational processes'
+          notes: 'Document all key operational processes'
         }
       ],
       workingGroups: [
         {
           id: '1',
-          groupName: 'Operational Review Team',
-          members: ['Mike Wilson', 'Sarah Johnson', 'Lisa Chen', 'David Brown'],
-          meetingDates: ['2024-02-15', '2024-03-01']
+          groupName: 'Operations Team',
+          members: ['Mike Wilson', 'Sarah Johnson', 'David Brown'],
+          meetingDates: ['2024-02-15']
         }
       ],
       assessment: {
         needsSatisfied: false,
-        needsDescription: 'Assessment framework needs development',
+        needsDescription: 'Assessment not yet started',
         objectivesAchieved: false,
-        objectivesDescription: 'Project in early planning phase',
+        objectivesDescription: 'Project in planning phase',
         projectManagerSignoff: false,
         signoffDate: ''
       },
-      players: [],
       issues: [],
       risks: []
     },
     '3': {
       id: '3',
-      title: 'Compliance Framework Update',
+      title: 'Compliance Risk Framework',
       status: 'Approved',
-      sponsor: 'David Brown',
-      coordinator: 'Lisa Chen',
+      sponsor: 'Lisa Chen',
+      coordinator: 'Robert Taylor',
       progress: 90,
       workflow: {},
       details: {
-        projectTitle: 'Compliance Framework Update',
-        startDate: '2023-10-01',
+        projectTitle: 'Compliance Risk Framework',
+        startDate: '2023-09-01',
         endDate: '2024-06-30',
-        projectManager: 'Lisa Chen',
-        riskPlanSponsor: 'David Brown',
-        riskPlanCoordinator: 'Lisa Chen',
-        projectStatus: 'In Progress',
+        projectManager: 'Robert Taylor',
+        riskPlanSponsor: 'Lisa Chen',
+        riskPlanCoordinator: 'Robert Taylor',
+        projectStatus: 'Closed',
         planApproved: true,
-        approvalDate: '2023-12-15',
-        projectDescription: 'Update compliance framework to meet new regulatory requirements',
-        whyNeeded: 'New regulations require updated compliance procedures',
-        objectives: 'Implement updated compliance framework across organization'
+        approvalDate: '2023-08-15',
+        projectDescription: 'Development of comprehensive compliance risk management framework',
+        whyNeeded: 'To ensure regulatory compliance and reduce compliance risks',
+        objectives: 'Achieve 100% regulatory compliance by end of project'
       },
       actionPlan: [
         {
           id: '1',
           taskNumber: 1,
           description: 'Review regulatory requirements',
-          assignedTo: 'Lisa Chen',
-          dueDate: '2024-01-15',
+          assignedTo: 'Robert Taylor',
+          dueDate: '2023-10-01',
           status: 'Completed',
-          notes: 'Regulatory review completed'
+          notes: 'All regulatory requirements documented'
         },
         {
           id: '2',
           taskNumber: 2,
-          description: 'Update compliance procedures',
-          assignedTo: 'David Brown',
-          dueDate: '2024-03-30',
-          status: 'In Progress',
-          notes: 'Procedures being updated'
+          description: 'Develop compliance procedures',
+          assignedTo: 'Robert Taylor',
+          dueDate: '2024-01-15',
+          status: 'Completed',
+          notes: 'Procedures implemented across organization'
         },
         {
           id: '3',
           taskNumber: 3,
-          description: 'Train staff on new procedures',
-          assignedTo: 'Lisa Chen',
-          dueDate: '2024-05-15',
-          status: 'New',
-          notes: 'Training schedule to be developed'
+          description: 'Conduct compliance audit',
+          assignedTo: 'Robert Taylor',
+          dueDate: '2024-05-30',
+          status: 'In Progress',
+          notes: 'Final audit in progress'
         }
       ],
       workingGroups: [
         {
           id: '1',
-          groupName: 'Compliance Review Team',
-          members: ['Lisa Chen', 'David Brown', 'Jane Doe', 'John Smith'],
-          meetingDates: ['2024-01-30', '2024-02-15', '2024-03-01']
+          groupName: 'Compliance Team',
+          members: ['Robert Taylor', 'Lisa Chen', 'Jennifer Martinez'],
+          meetingDates: ['2023-09-15', '2023-10-15', '2023-11-15', '2023-12-15']
         }
       ],
       assessment: {
         needsSatisfied: true,
-        needsDescription: 'Compliance requirements clearly identified',
+        needsDescription: 'Compliance framework successfully implemented',
         objectivesAchieved: true,
-        objectivesDescription: 'Project on track to meet objectives',
+        objectivesDescription: 'All compliance objectives met or exceeded',
         projectManagerSignoff: true,
-        signoffDate: '2024-01-15'
+        signoffDate: '2024-05-15'
       },
-      players: [],
       issues: [],
       risks: []
     }
   };
 
-  // Return mock data based on projectId, or default to first project if not found
-  return mockProjects[projectId] || mockProjects['1'];
+  // Simulate API delay
+  await new Promise(resolve => setTimeout(resolve, 500));
 
-  // Uncomment this when API is available:
-  /*
-  try {
-    const response = await fetch(`/api/projects/${projectId}`);
-    if (!response.ok) {
-      console.warn('API endpoint not available, using mock data');
-      return mockData;
-    }
-    return response.json();
-  } catch (error) {
-    console.warn('Error fetching project, using mock data:', error);
-    return mockData;
+  const project = mockProjects[projectId];
+  if (!project) {
+    throw new Error(`Project with ID ${projectId} not found`);
   }
-  */
+
+  return project;
 };
 
 export const useProject = (projectId: string) => {
@@ -238,8 +218,6 @@ export const useProject = (projectId: string) => {
     queryFn: () => fetchProject(projectId),
     enabled: !!projectId,
     staleTime: 5 * 60 * 1000, // 5 minutes
-    refetchOnWindowFocus: false,
-    retry: false, // Don't retry failed requests
-    retryOnMount: false, // Don't retry on mount
+    retry: 1,
   });
 }; 
