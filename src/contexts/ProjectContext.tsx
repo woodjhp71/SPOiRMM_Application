@@ -3,6 +3,7 @@ import { Player } from '../components/PlayersChart/PlayersChart';
 import { ProjectPlanningData } from '../components/ProjectPlanning/ProjectPlanning';
 import { Issue } from '../components/IssuesList/IssuesList';
 import { Risk } from '../components/RiskRegister/RiskRegister';
+import { FullProjectData } from '../hooks/useProject';
 
 export interface ProjectData extends ProjectPlanningData {
   id: string;
@@ -13,6 +14,7 @@ export interface ProjectData extends ProjectPlanningData {
 interface ProjectContextType {
   projectData: ProjectData | null;
   setProjectData: (data: ProjectData) => void;
+  loadProjectData: (data: FullProjectData) => void;
   updateProjectSection: (section: keyof ProjectData, data: any) => void;
   updatePlayers: (players: Player[]) => void;
   updateIssues: (issues: Issue[]) => void;
@@ -35,6 +37,10 @@ interface ProjectProviderProps {
 
 export const ProjectProvider: React.FC<ProjectProviderProps> = ({ children }) => {
   const [projectData, setProjectData] = useState<ProjectData | null>(null);
+
+  const loadProjectData = (data: FullProjectData) => {
+    setProjectData(data as ProjectData);
+  };
 
   const updateProjectSection = (section: keyof ProjectData, data: any) => {
     if (projectData) {
@@ -76,6 +82,7 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({ children }) =>
                 <ProjectContext.Provider value={{
                   projectData,
                   setProjectData,
+                  loadProjectData,
                   updateProjectSection,
                   updatePlayers,
                   updateIssues,
