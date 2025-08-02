@@ -8,6 +8,10 @@ import PPDetails from './modules/PPDetails';
 import PPActionPlan from './modules/PPActionPlan';
 import PPWorkingGroups from './modules/PPWorkingGroups';
 import PPAssessment from './modules/PPAssessment';
+import PlayersChart from '../PlayersChart/PlayersChart';
+import IssuesList from '../IssuesList/IssuesList';
+import RiskRegister from '../RiskRegister/RiskRegister';
+import { Player } from '../PlayersChart/PlayersChart';
 import { Issue } from '../IssuesList/IssuesList';
 import { Risk } from '../RiskRegister/RiskRegister';
 import {
@@ -60,8 +64,20 @@ export interface ProjectPlanningData {
     projectManagerSignoff: boolean;
     signoffDate: string;
   };
+  players: Player[];
   issues: Issue[];
   risks: Risk[];
+}
+
+interface NavigationItem {
+  id: string;
+  name: string;
+  component: React.ComponentType<any>;
+  dataKey: keyof ProjectPlanningData;
+  icon: React.ComponentType<any>;
+  color: string;
+  status: 'New' | 'In Progress' | 'Completed';
+  description: string;
 }
 
 const ProjectPlanning: React.FC = () => {
@@ -242,7 +258,7 @@ const ProjectPlanning: React.FC = () => {
         return '●';
     }
   };
-
+  
   const updateProjectData = (section: keyof ProjectPlanningData, data: any) => {
     if (contextProjectData) {
       // This would typically update the API as well
@@ -370,9 +386,9 @@ const ProjectPlanning: React.FC = () => {
         <div className="flex-1 bg-gray-50 p-6">
           <div className="bg-white rounded-lg shadow-lg overflow-hidden">
             <div className="p-6">
-              {activeItem && React.createElement(activeItem.component, {
-                data: projectData[activeItem.dataKey] as any,
-                updateData: (data: any) => updateProjectData(activeItem.dataKey, data),
+              {navigationItems[activeTab] && React.createElement(navigationItems[activeTab].component, {
+                data: projectData[navigationItems[activeTab].dataKey] as any,
+                updateData: (data: any) => updateProjectData(navigationItems[activeTab].dataKey, data),
                 projectData: projectData
               })}
             </div>
