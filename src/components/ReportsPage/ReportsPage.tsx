@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import Header from '../Header';
 
 const ReportsPage: React.FC = () => {
   const navigate = useNavigate();
@@ -11,17 +12,7 @@ const ReportsPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div className="flex items-center space-x-4">
-              <div className="flex-shrink-0">
-                <h1 className="text-2xl font-bold text-gray-900">SPOiRMM</h1>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Header title="Reports Module" />
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

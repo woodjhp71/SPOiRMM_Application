@@ -1,5 +1,6 @@
 import React from 'react';
 import NavButton from './NavButton';
+import Header from '../Header';
 
 const Welcome: React.FC = () => {
   // Mock user data - in a real app this would come from authentication context
@@ -9,28 +10,17 @@ const Welcome: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div className="flex items-center space-x-4">
-              <div className="flex-shrink-0">
-                <h1 className="text-2xl font-bold text-gray-900">SPOiRMM</h1>
-              </div>
-              <div>
-                <h2 className="text-lg font-medium text-gray-900">
-                  Welcome back, {userName}
-                </h2>
-                <p className="text-sm text-gray-500">{userRole}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Header 
+        title="SPOiRMM Risk Management Platform"
+      />
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Welcome</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            Welcome, {userName}
+          </h2>
+          <p className="text-lg text-gray-600 mb-4">{userRole}</p>
           <p className="text-lg text-gray-600">Select a module to continue</p>
         </div>
 
