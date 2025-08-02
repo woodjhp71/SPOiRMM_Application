@@ -80,6 +80,11 @@ interface NavigationItem {
   description: string;
 }
 
+  issues: Issue[];
+  risks: Risk[];
+}
+
+
 const ProjectPlanning: React.FC = () => {
   const { projectId } = useParams<{ projectId: string }>();
   const [searchParams] = useSearchParams();
@@ -146,7 +151,6 @@ const ProjectPlanning: React.FC = () => {
       projectManagerSignoff: false,
       signoffDate: '',
     },
-    players: [],
     issues: [],
     risks: [],
   };

@@ -27,9 +27,9 @@ export interface Player {
 const PlayersChart: React.FC = () => {
 
   const navigate = useNavigate();
-  const { projectData, updatePlayers } = useProject();
+  const { updatePlayers } = useProject();
   
-  const [players, setPlayers] = useState<Player[]>(projectData?.players || []);
+  const [players, setPlayers] = useState<Player[]>([]);
   const [isAddingPlayer, setIsAddingPlayer] = useState(false);
   const [editingPlayer, setEditingPlayer] = useState<Player | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
