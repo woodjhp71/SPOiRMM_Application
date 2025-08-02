@@ -6,7 +6,7 @@ import PlayersChart from './components/PlayersChart/PlayersChart';
 import IssuesList from './components/IssuesList/IssuesList';
 import RiskRegister from './components/RiskRegister/RiskRegister';
 import PlayersChartPage from './components/PlayersChartPage/PlayersChartPage';
-import LandingPage from './components/LandingPage/LandingPage';
+import UserDashboard from './components/UserDashboard/UserDashboard';
 import ProjectsList from './components/ProjectsList/ProjectsList';
 import { ProjectProvider } from './contexts/ProjectContext';
 
@@ -26,7 +26,7 @@ function App() {
         <Router>
           <div className="App">
             <Routes>
-              <Route path="/" element={<LandingPage />} />
+              <Route path="/" element={<UserDashboard />} />
               <Route path="/projects" element={<ProjectsList />} />
               <Route path="/projects/:projectId/planning" element={<ProjectPlanning />} />
               <Route path="/project/:id" element={<ProjectPlanning />} />

@@ -43,7 +43,7 @@ interface ToolActivity {
   activity: number;
 }
 
-const LandingPage: React.FC = () => {
+const UserDashboard: React.FC = () => {
   // projectData is available from context but not used in this component
   const [userRole] = useState('Risk Plan Coordinator');
   const [userName] = useState('Lisa Chen');
@@ -611,4 +611,4 @@ const LandingPage: React.FC = () => {
   );
 };
 
-export default LandingPage; 
+export default UserDashboard; 
