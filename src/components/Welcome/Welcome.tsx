@@ -4,7 +4,7 @@ import NavButton from './NavButton';
 const Welcome: React.FC = () => {
   // Mock user data - in a real app this would come from authentication context
   const userName = 'Lisa Chen';
-  const userRole = 'Risk Plan Coordinator';
+  const userRole = 'Risk Plan Coordinator' as const;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -40,13 +40,13 @@ const Welcome: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
           <NavButton
             label="Dashboard"
-            color="slate"
+            color="cadet-blue"
             navigateTo="/dashboard"
             description="View your personalized dashboard with projects, action items, and key metrics"
           />
           <NavButton
             label="Planning"
-            color="blue"
+            color="denim-blue"
             navigateTo="/planning"
             description="Access project planning tools and risk assessment modules"
           />

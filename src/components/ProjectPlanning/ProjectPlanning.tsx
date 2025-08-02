@@ -167,11 +167,11 @@ const ProjectPlanning: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-             <header 
-         className="bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md"
-         role="banner"
-         aria-label="Application Header"
-       >
+                           <header
+                className="bg-gradient-to-r from-indigo-700 to-indigo-800 text-white shadow-md"
+                role="banner"
+                aria-label="Application Header"
+              >
         <div className="px-6 py-4">
           <div className="flex justify-between items-center">
             <div className="flex-shrink-0">
@@ -183,7 +183,7 @@ const ProjectPlanning: React.FC = () => {
             <div className="flex-shrink-0">
               <button
                 onClick={handleBackClick}
-                                 className="p-2 text-white hover:text-blue-100 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 rounded-md transition-colors duration-200"
+                                 className="p-2 text-white hover:text-indigo-100 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 rounded-md transition-colors duration-200"
                 aria-label="Return to main navigation"
               >
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

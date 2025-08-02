@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 interface NavButtonProps {
   label: string;
-  color: 'blue' | 'red' | 'teal' | 'yellow' | 'indigo' | 'orange' | 'slate' | 'charcoal';
+  color: 'blue' | 'red' | 'teal' | 'yellow' | 'indigo' | 'orange' | 'slate' | 'charcoal' | 'cadet-blue' | 'denim-blue';
   navigateTo: string;
   description: string;
 }
@@ -65,9 +65,23 @@ const NavButton: React.FC<NavButtonProps> = ({ label, color, navigateTo, descrip
       charcoal: {
         bg: 'bg-gray-800',
         hover: 'hover:bg-gray-900',
-        border: 'border-gray-200',
-        text: 'text-gray-700',
-        icon: 'text-gray-500'
+        border: 'border-gray-300',
+        text: 'text-gray-800',
+        icon: 'text-gray-600'
+      },
+      'cadet-blue': {
+        bg: 'bg-sky-600',
+        hover: 'hover:bg-sky-700',
+        border: 'border-sky-200',
+        text: 'text-sky-700',
+        icon: 'text-sky-500'
+      },
+      'denim-blue': {
+        bg: 'bg-indigo-700',
+        hover: 'hover:bg-indigo-800',
+        border: 'border-indigo-200',
+        text: 'text-indigo-700',
+        icon: 'text-indigo-500'
       }
     };
     return colorMap[color as keyof typeof colorMap] || colorMap.blue;

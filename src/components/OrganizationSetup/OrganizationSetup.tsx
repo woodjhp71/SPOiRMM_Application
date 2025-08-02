@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 interface Module {
@@ -11,7 +11,7 @@ interface Module {
 
 const OrganizationSetup: React.FC = () => {
   const navigate = useNavigate();
-  const [activeModule, setActiveModule] = useState<string | null>(null);
+
 
   const handleBackClick = () => {
     navigate('/');
