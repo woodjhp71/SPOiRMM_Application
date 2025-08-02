@@ -74,7 +74,6 @@ const fetchProject = async (projectId: string): Promise<FullProjectData> => {
         projectManagerSignoff: false,
         signoffDate: ''
       },
-      players: [],
       issues: [],
       risks: []
     },
@@ -136,7 +135,6 @@ const fetchProject = async (projectId: string): Promise<FullProjectData> => {
         projectManagerSignoff: false,
         signoffDate: ''
       },
-      players: [],
       issues: [],
       risks: []
     },
@@ -207,7 +205,6 @@ const fetchProject = async (projectId: string): Promise<FullProjectData> => {
         projectManagerSignoff: true,
         signoffDate: '2024-01-15'
       },
-      players: [],
       issues: [],
       risks: []
     }
