@@ -57,6 +57,12 @@ const Welcome: React.FC = () => {
             description="Generate and view comprehensive risk management reports"
           />
           <NavButton
+            label="Organization Setup"
+            color="charcoal"
+            navigateTo="/organization"
+            description="Manage enterprise-level data, departments, agreements, and policies"
+          />
+          <NavButton
             label="Admin / Settings"
             color="yellow"
             navigateTo="/admin"

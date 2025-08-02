@@ -177,37 +177,47 @@ const PlayersChart: React.FC = () => {
       <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
           {/* Header */}
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <button
-                  onClick={() => navigate(`/project/${projectId}`)}
-                  className="flex items-center px-3 py-2 text-white hover:bg-blue-700 rounded-md transition-colors"
-                >
-                  <ArrowLeftIcon className="h-4 w-4 mr-2" />
-                  Back to Project
-                </button>
-                <div>
-                  <h1 className="text-2xl font-bold text-white">
-                    Players Chart - SPOiRMM
-                  </h1>
-                  <p className="text-blue-100 mt-1">
-                    External Stakeholder Management for Risk Planning
-                  </p>
+          {/* Header */}
+          <header
+            className="bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md"
+            role="banner"
+            aria-label="Application Header"
+          >
+            <div className="px-6 py-4">
+              <div className="flex justify-between items-center">
+                <div className="flex-shrink-0">
+                  <h1 className="text-2xl font-bold text-white">SPOiRMM</h1>
+                </div>
+                <div className="text-center flex-1">
+                  <h2 className="text-2xl font-bold text-white">Players Chart Management</h2>
+                </div>
+                <div className="flex-shrink-0">
+                  <button
+                    onClick={() => navigate('/organization')}
+                    className="p-2 text-white hover:text-blue-100 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 rounded-md transition-colors duration-200"
+                    aria-label="Return to organization setup"
+                  >
+                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    </svg>
+                  </button>
                 </div>
               </div>
+            </div>
+          </header>
+
+          {/* Filters and Search */}
+          <div className="p-6 border-b border-gray-200">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">Players Chart</h3>
               <button
                 onClick={() => setIsAddingPlayer(true)}
-                className="flex items-center px-4 py-2 bg-white text-blue-600 rounded-md hover:bg-blue-50 transition-colors"
+                className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
               >
                 <PlusIcon className="h-5 w-5 mr-2" />
                 Add Player
               </button>
             </div>
-          </div>
-
-          {/* Filters and Search */}
-          <div className="p-6 border-b border-gray-200">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               {/* Search */}
               <div className="relative">
@@ -684,6 +694,27 @@ const PlayersChart: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Back Button */}
+      <div className="text-center mt-8">
+        <button
+          onClick={() => navigate('/organization')}
+          className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-sky-500 hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 transition-colors duration-200"
+          aria-label="Return to organization setup"
+        >
+          <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          Back to Organization Setup
+        </button>
+      </div>
+
+      {/* Footer Info */}
+      <div className="mt-12 text-center">
+        <p className="text-sm text-gray-500">
+          SPOiRMM - Strategic Planning of Integrated Risk Management Model
+        </p>
+      </div>
     </div>
   );
 };
