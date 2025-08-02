@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
-import { Tab } from '@headlessui/react';
 import { classNames } from '../../utils/classNames';
 import { useProject as useProjectContext } from '../../contexts/ProjectContext';
 import { useProject as useProjectData } from '../../hooks/useProject';
@@ -197,69 +196,70 @@ const ProjectPlanning: React.FC = () => {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-
-          <Tab.Group selectedIndex={activeTab} onChange={setActiveTab}>
-            <Tab.List className="flex space-x-1 bg-gray-100 p-1">
-              {tabs.map((tab) => (
-                <Tab
+      <main className="flex flex-row min-h-screen">
+        {/* Sidebar Navigation */}
+        <nav 
+          className="w-64 bg-white shadow-lg overflow-y-auto"
+          aria-label="Project Planning Navigation"
+        >
+          <div className="p-4">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Navigation</h3>
+            <div className="flex flex-col space-y-2">
+              {tabs.map((tab, index) => (
+                <button
                   key={tab.name}
-                  className={({ selected }) =>
-                    classNames(
-                      'w-full py-2.5 text-sm font-medium leading-5 rounded-lg',
-                      'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2',
-                      selected
-                        ? 'bg-white text-blue-700 shadow'
-                        : 'text-gray-600 hover:bg-white/[0.12] hover:text-blue-600'
-                    )
-                  }
+                  onClick={() => setActiveTab(index)}
+                  className={classNames(
+                    'w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-colors duration-200',
+                    'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
+                    activeTab === index
+                      ? 'bg-blue-100 text-blue-700 font-semibold'
+                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                  )}
+                  role="tab"
+                  aria-selected={activeTab === index}
                 >
                   {tab.name}
-                </Tab>
+                </button>
               ))}
-            </Tab.List>
-            <Tab.Panels className="mt-2">
-              {tabs.map((tab) => (
-                <Tab.Panel
-                  key={tab.name}
-                  className={classNames(
-                    'rounded-xl bg-white p-6',
-                    'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2'
-                  )}
-                >
-                  <tab.component
-                    data={projectData[tab.dataKey] as any}
-                    updateData={(data) => updateProjectData(tab.dataKey, data)}
-                    projectData={projectData}
-                  />
-                </Tab.Panel>
-              ))}
-            </Tab.Panels>
-          </Tab.Group>
-        </div>
+            </div>
+          </div>
+        </nav>
 
-        {/* Back Button */}
-        <div className="text-center mt-8">
-          <button
-            onClick={handleBackClick}
-            className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-sky-500 hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 transition-colors duration-200"
-            aria-label="Return to main navigation"
-          >
-            <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Back to Main Menu
-          </button>
-        </div>
-
-        {/* Footer Info */}
-        <div className="mt-12 text-center">
-          <p className="text-sm text-gray-500">
-            SPOiRMM - Strategic Planning of Integrated Risk Management Model
-          </p>
+        {/* Main Content Area */}
+        <div className="flex-1 bg-gray-50 p-6">
+          <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div className="p-6">
+              {tabs[activeTab] && React.createElement(tabs[activeTab].component, {
+                data: projectData[tabs[activeTab].dataKey] as any,
+                updateData: (data: any) => updateProjectData(tabs[activeTab].dataKey, data),
+                projectData: projectData
+              })}
+            </div>
+          </div>
         </div>
       </main>
+
+      {/* Back Button */}
+      <div className="text-center mt-8">
+        <button
+          onClick={handleBackClick}
+          className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-sky-500 hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 transition-colors duration-200"
+          aria-label="Return to main navigation"
+        >
+          <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          Back to Main Menu
+        </button>
+      </div>
+
+      {/* Footer Info */}
+      <div className="mt-12 text-center">
+        <p className="text-sm text-gray-500">
+          SPOiRMM - Strategic Planning of Integrated Risk Management Model
+        </p>
+      </div>
     </div>
   );
 };
