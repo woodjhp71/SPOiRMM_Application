@@ -74,6 +74,7 @@ const fetchProject = async (projectId: string): Promise<FullProjectData> => {
         projectManagerSignoff: false,
         signoffDate: ''
       },
+      players: [],
       issues: [],
       risks: []
     },
@@ -113,89 +114,91 @@ const fetchProject = async (projectId: string): Promise<FullProjectData> => {
       workingGroups: [
         {
           id: '1',
-          groupName: 'Operations Team',
-          members: ['Mike Wilson', 'Sarah Johnson', 'David Brown'],
-          meetingDates: ['2024-02-15']
+          groupName: 'Operational Review Team',
+          members: ['Mike Wilson', 'Sarah Johnson', 'Lisa Chen', 'David Brown'],
+          meetingDates: ['2024-02-15', '2024-03-01']
         }
       ],
       assessment: {
         needsSatisfied: false,
-        needsDescription: 'Assessment not yet started',
+        needsDescription: 'Assessment framework needs development',
         objectivesAchieved: false,
-        objectivesDescription: 'Project in planning phase',
+        objectivesDescription: 'Project in early planning phase',
         projectManagerSignoff: false,
         signoffDate: ''
       },
+      players: [],
       issues: [],
       risks: []
     },
     '3': {
       id: '3',
-      title: 'Compliance Risk Framework',
+      title: 'Compliance Framework Update',
       status: 'Approved',
-      sponsor: 'Lisa Chen',
-      coordinator: 'Robert Taylor',
+      sponsor: 'David Brown',
+      coordinator: 'Lisa Chen',
       progress: 90,
       workflow: {},
       details: {
-        projectTitle: 'Compliance Risk Framework',
-        startDate: '2023-09-01',
+        projectTitle: 'Compliance Framework Update',
+        startDate: '2023-10-01',
         endDate: '2024-06-30',
-        projectManager: 'Robert Taylor',
-        riskPlanSponsor: 'Lisa Chen',
-        riskPlanCoordinator: 'Robert Taylor',
-        projectStatus: 'Closed',
+        projectManager: 'Lisa Chen',
+        riskPlanSponsor: 'David Brown',
+        riskPlanCoordinator: 'Lisa Chen',
+        projectStatus: 'In Progress',
         planApproved: true,
-        approvalDate: '2023-08-15',
-        projectDescription: 'Development of comprehensive compliance risk management framework',
-        whyNeeded: 'To ensure regulatory compliance and reduce compliance risks',
-        objectives: 'Achieve 100% regulatory compliance by end of project'
+        approvalDate: '2023-12-15',
+        projectDescription: 'Update compliance framework to meet new regulatory requirements',
+        whyNeeded: 'New regulations require updated compliance procedures',
+        objectives: 'Implement updated compliance framework across organization'
       },
       actionPlan: [
         {
           id: '1',
           taskNumber: 1,
           description: 'Review regulatory requirements',
-          assignedTo: 'Robert Taylor',
-          dueDate: '2023-10-01',
+          assignedTo: 'Lisa Chen',
+          dueDate: '2024-01-15',
           status: 'Completed',
-          notes: 'All regulatory requirements documented'
+          notes: 'Regulatory review completed'
         },
         {
           id: '2',
           taskNumber: 2,
-          description: 'Develop compliance procedures',
-          assignedTo: 'Robert Taylor',
-          dueDate: '2024-01-15',
-          status: 'Completed',
-          notes: 'Procedures implemented across organization'
+          description: 'Update compliance procedures',
+          assignedTo: 'David Brown',
+          dueDate: '2024-03-30',
+          status: 'In Progress',
+          notes: 'Procedures being updated'
         },
         {
           id: '3',
           taskNumber: 3,
-          description: 'Conduct compliance audit',
-          assignedTo: 'Robert Taylor',
-          dueDate: '2024-05-30',
-          status: 'In Progress',
-          notes: 'Final audit in progress'
+          description: 'Train staff on new procedures',
+          assignedTo: 'Lisa Chen',
+          dueDate: '2024-05-15',
+          status: 'New',
+          notes: 'Training schedule to be developed'
         }
       ],
       workingGroups: [
         {
           id: '1',
-          groupName: 'Compliance Team',
-          members: ['Robert Taylor', 'Lisa Chen', 'Jennifer Martinez'],
-          meetingDates: ['2023-09-15', '2023-10-15', '2023-11-15', '2023-12-15']
+          groupName: 'Compliance Review Team',
+          members: ['Lisa Chen', 'David Brown', 'Jane Doe', 'John Smith'],
+          meetingDates: ['2024-01-30', '2024-02-15', '2024-03-01']
         }
       ],
       assessment: {
         needsSatisfied: true,
-        needsDescription: 'Compliance framework successfully implemented',
+        needsDescription: 'Compliance requirements clearly identified',
         objectivesAchieved: true,
-        objectivesDescription: 'All compliance objectives met or exceeded',
+        objectivesDescription: 'Project on track to meet objectives',
         projectManagerSignoff: true,
-        signoffDate: '2024-05-15'
+        signoffDate: '2024-01-15'
       },
+      players: [],
       issues: [],
       risks: []
     }

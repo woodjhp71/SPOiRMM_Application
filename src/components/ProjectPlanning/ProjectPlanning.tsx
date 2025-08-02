@@ -146,6 +146,7 @@ const ProjectPlanning: React.FC = () => {
       projectManagerSignoff: false,
       signoffDate: '',
     },
+    players: [],
     issues: [],
     risks: [],
   };
@@ -290,8 +291,6 @@ const ProjectPlanning: React.FC = () => {
       </div>
     );
   }
-
-  const activeItem = navigationItems[activeTab];
 
   return (
     <div className="min-h-screen bg-gray-50">
