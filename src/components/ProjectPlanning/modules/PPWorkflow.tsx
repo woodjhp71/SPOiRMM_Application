@@ -2,7 +2,6 @@ import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   ArrowRightIcon,
-  UsersIcon,
   ExclamationTriangleIcon,
   DocumentTextIcon,
   ChartBarIcon,
@@ -95,7 +94,7 @@ const PPWorkflow: React.FC<PPWorkflowProps> = () => {
           SPOiRMM Workflow Navigation
         </h2>
         <p className="text-purple-700 mb-6">
-          Navigate through the integrated risk management workflow. Each step builds upon the previous to create a comprehensive risk management framework.
+          Navigate through the integrated risk management workflow. Project-level components focus on issues and risks, while stakeholder context is managed at the organization level for consistency across all projects.
         </p>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

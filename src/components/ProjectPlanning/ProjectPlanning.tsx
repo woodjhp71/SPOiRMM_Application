@@ -8,10 +8,6 @@ import PPDetails from './modules/PPDetails';
 import PPActionPlan from './modules/PPActionPlan';
 import PPWorkingGroups from './modules/PPWorkingGroups';
 import PPAssessment from './modules/PPAssessment';
-import PlayersChart from '../PlayersChart/PlayersChart';
-import IssuesList from '../IssuesList/IssuesList';
-import RiskRegister from '../RiskRegister/RiskRegister';
-import { Player } from '../PlayersChart/PlayersChart';
 import { Issue } from '../IssuesList/IssuesList';
 import { Risk } from '../RiskRegister/RiskRegister';
 import {
@@ -64,26 +60,9 @@ export interface ProjectPlanningData {
     projectManagerSignoff: boolean;
     signoffDate: string;
   };
-  players: Player[];
   issues: Issue[];
   risks: Risk[];
 }
-
-interface NavigationItem {
-  id: string;
-  name: string;
-  component: React.ComponentType<any>;
-  dataKey: keyof ProjectPlanningData;
-  icon: React.ComponentType<any>;
-  color: string;
-  status: 'New' | 'In Progress' | 'Completed';
-  description: string;
-}
-
-  issues: Issue[];
-  risks: Risk[];
-}
-
 
 const ProjectPlanning: React.FC = () => {
   const { projectId } = useParams<{ projectId: string }>();
@@ -400,6 +379,80 @@ const ProjectPlanning: React.FC = () => {
           </div>
         </div>
       </main>
+
+      {/* Integration Section */}
+      <div className="bg-gray-50 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div className="px-6 py-5 border-b border-gray-200">
+              <h3 className="text-lg font-semibold text-gray-900">Integration & References</h3>
+              <p className="text-sm text-gray-600 mt-1">
+                This project planning module integrates with organization-level components for comprehensive risk management.
+              </p>
+            </div>
+            <div className="p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Players Chart Integration */}
+                <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                  <div className="flex items-center mb-3">
+                    <div className="p-2 bg-blue-500 rounded-lg mr-3">
+                      <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+                      </svg>
+                    </div>
+                    <h4 className="text-lg font-medium text-blue-900">Players Chart (Organization-level)</h4>
+                  </div>
+                  <p className="text-blue-800 text-sm mb-3">
+                    Stakeholder context and role mapping are managed at the organization level for consistency across all projects.
+                  </p>
+                  <button
+                    onClick={() => navigate('/organization')}
+                    className="inline-flex items-center px-3 py-2 border border-blue-300 text-sm font-medium rounded-md text-blue-700 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+                  >
+                    View Organization Players
+                    <svg className="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </div>
+
+                {/* Organization Setup Integration */}
+                <div className="bg-purple-50 rounded-lg p-4 border border-purple-200">
+                  <div className="flex items-center mb-3">
+                    <div className="p-2 bg-purple-500 rounded-lg mr-3">
+                      <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                      </svg>
+                    </div>
+                    <h4 className="text-lg font-medium text-purple-900">Internal Functions & Organization Setup</h4>
+                  </div>
+                  <p className="text-purple-800 text-sm mb-3">
+                    Department structures, internal functions, and organizational context are configured at the organization level.
+                  </p>
+                  <button
+                    onClick={() => navigate('/organization')}
+                    className="inline-flex items-center px-3 py-2 border border-purple-300 text-sm font-medium rounded-md text-purple-700 bg-white hover:bg-purple-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors duration-200"
+                  >
+                    View Organization Setup
+                    <svg className="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              {/* Read-only Context Information */}
+              <div className="mt-6 bg-gray-50 rounded-lg p-4">
+                <h4 className="text-sm font-medium text-gray-900 mb-2">Context Information</h4>
+                <p className="text-sm text-gray-600">
+                  Player role context and organizational structures are read-only at the project level and sourced from the organizational configuration. 
+                  This ensures consistency and maintains the integrity of stakeholder relationships across all projects.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* Back Button */}
       <div className="text-center mt-8">
