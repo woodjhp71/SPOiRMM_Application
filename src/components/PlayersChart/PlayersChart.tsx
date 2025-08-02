@@ -27,9 +27,9 @@ export interface Player {
 const PlayersChart: React.FC = () => {
 
   const navigate = useNavigate();
-  const { projectData, updatePlayers } = useProject();
+  const { updatePlayers } = useProject();
   
-  const [players, setPlayers] = useState<Player[]>(projectData?.players || []);
+  const [players, setPlayers] = useState<Player[]>([]);
   const [isAddingPlayer, setIsAddingPlayer] = useState(false);
   const [editingPlayer, setEditingPlayer] = useState<Player | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -59,6 +59,11 @@ const PlayersChart: React.FC = () => {
       playerRole: roleOptions[0] || '',
       entityNature: natureOptions[0] || 'Individual'
     }));
+
+    // Clear combination errors when type changes
+    if (errors.combination) {
+      setErrors(prev => ({ ...prev, combination: '' }));
+    }
   };
 
   // Handle edit player type change
@@ -72,6 +77,71 @@ const PlayersChart: React.FC = () => {
       playerRole: roleOptions[0] || '',
       entityNature: natureOptions[0] || 'Individual'
     } : null);
+
+    // Clear combination errors when type changes
+    if (errors.combination) {
+      setErrors(prev => ({ ...prev, combination: '' }));
+    }
+  };
+
+  // Handle role change with validation
+  const handleRoleChange = (role: string) => {
+    setNewPlayer(prev => ({ ...prev, playerRole: role }));
+    
+    // Validate combination in real-time
+    if (newPlayer.playerType && role && newPlayer.entityNature) {
+      const isValid = validatePlayerCombination(newPlayer.playerType, role, newPlayer.entityNature);
+      if (!isValid) {
+        setErrors(prev => ({ ...prev, combination: 'Invalid combination of Player Type, Role, and Entity Nature' }));
+      } else {
+        setErrors(prev => ({ ...prev, combination: '' }));
+      }
+    }
+  };
+
+  // Handle entity nature change with validation
+  const handleEntityNatureChange = (nature: Player['entityNature']) => {
+    setNewPlayer(prev => ({ ...prev, entityNature: nature }));
+    
+    // Validate combination in real-time
+    if (newPlayer.playerType && newPlayer.playerRole && nature) {
+      const isValid = validatePlayerCombination(newPlayer.playerType, newPlayer.playerRole, nature);
+      if (!isValid) {
+        setErrors(prev => ({ ...prev, combination: 'Invalid combination of Player Type, Role, and Entity Nature' }));
+      } else {
+        setErrors(prev => ({ ...prev, combination: '' }));
+      }
+    }
+  };
+
+  // Handle edit role change with validation
+  const handleEditRoleChange = (role: string) => {
+    setEditingPlayer(prev => prev ? { ...prev, playerRole: role } : null);
+    
+    // Validate combination in real-time
+    if (editingPlayer?.playerType && role && editingPlayer.entityNature) {
+      const isValid = validatePlayerCombination(editingPlayer.playerType, role, editingPlayer.entityNature);
+      if (!isValid) {
+        setErrors(prev => ({ ...prev, combination: 'Invalid combination of Player Type, Role, and Entity Nature' }));
+      } else {
+        setErrors(prev => ({ ...prev, combination: '' }));
+      }
+    }
+  };
+
+  // Handle edit entity nature change with validation
+  const handleEditEntityNatureChange = (nature: Player['entityNature']) => {
+    setEditingPlayer(prev => prev ? { ...prev, entityNature: nature } : null);
+    
+    // Validate combination in real-time
+    if (editingPlayer?.playerType && editingPlayer.playerRole && nature) {
+      const isValid = validatePlayerCombination(editingPlayer.playerType, editingPlayer.playerRole, nature);
+      if (!isValid) {
+        setErrors(prev => ({ ...prev, combination: 'Invalid combination of Player Type, Role, and Entity Nature' }));
+      } else {
+        setErrors(prev => ({ ...prev, combination: '' }));
+      }
+    }
   };
 
   // Business logic for conditional dropdowns
@@ -207,13 +277,6 @@ const PlayersChart: React.FC = () => {
 
     if (isDuplicate) {
       errors.playerName = 'A player with this name, role, and nature already exists';
-    }
-
-    // Validate business rule combinations
-    if (player.playerType && player.playerRole && player.entityNature) {
-      if (!validatePlayerCombination(player.playerType, player.playerRole, player.entityNature)) {
-        errors.combination = 'Invalid combination of Player Type, Role, and Entity Nature';
-      }
     }
 
     return errors;
@@ -454,7 +517,7 @@ const PlayersChart: React.FC = () => {
                   </label>
                   <select
                     value={newPlayer.playerRole}
-                    onChange={(e) => setNewPlayer({ ...newPlayer, playerRole: e.target.value })}
+                    onChange={(e) => handleRoleChange(e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     {getPlayerRoleOptions(newPlayer.playerType || 'Recipient').map(role => (
@@ -469,7 +532,7 @@ const PlayersChart: React.FC = () => {
                   </label>
                   <select
                     value={newPlayer.entityNature}
-                    onChange={(e) => setNewPlayer({ ...newPlayer, entityNature: e.target.value as Player['entityNature'] })}
+                    onChange={(e) => handleEntityNatureChange(e.target.value as Player['entityNature'])}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     {getEntityNatureOptions(newPlayer.playerType || 'Recipient').map(nature => (
@@ -745,7 +808,7 @@ const PlayersChart: React.FC = () => {
                   </label>
                   <select
                     value={editingPlayer.playerRole}
-                    onChange={(e) => setEditingPlayer({ ...editingPlayer, playerRole: e.target.value })}
+                    onChange={(e) => handleEditRoleChange(e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     {getPlayerRoleOptions(editingPlayer.playerType).map(role => (
@@ -760,7 +823,7 @@ const PlayersChart: React.FC = () => {
                   </label>
                   <select
                     value={editingPlayer.entityNature}
-                    onChange={(e) => setEditingPlayer({ ...editingPlayer, entityNature: e.target.value as Player['entityNature'] })}
+                    onChange={(e) => handleEditEntityNatureChange(e.target.value as Player['entityNature'])}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     {getEntityNatureOptions(editingPlayer.playerType).map(nature => (

@@ -10,6 +10,16 @@ import PPWorkingGroups from './modules/PPWorkingGroups';
 import PPAssessment from './modules/PPAssessment';
 import { Issue } from '../IssuesList/IssuesList';
 import { Risk } from '../RiskRegister/RiskRegister';
+import {
+  DocumentTextIcon,
+  ClipboardDocumentListIcon,
+  UserGroupIcon,
+  ClipboardDocumentCheckIcon,
+  UsersIcon,
+  ExclamationTriangleIcon,
+  ChartBarIcon,
+  ChevronRightIcon
+} from '@heroicons/react/24/outline';
 
 export interface ProjectPlanningData {
   workflow: any;
@@ -68,11 +78,14 @@ const ProjectPlanning: React.FC = () => {
   // Get the tab parameter from URL and set initial active tab
   const tabParam = searchParams.get('tab');
   const getInitialTab = () => {
-    if (tabParam === 'working-groups') return 3; // Working Groups tab index
+    if (tabParam === 'working-groups') return 3;
     if (tabParam === 'workflow') return 0;
     if (tabParam === 'details') return 1;
     if (tabParam === 'action-plan') return 2;
     if (tabParam === 'assessment') return 4;
+    if (tabParam === 'players') return 5;
+    if (tabParam === 'issues') return 6;
+    if (tabParam === 'register') return 7;
     return 0; // Default to first tab
   };
   
@@ -121,13 +134,114 @@ const ProjectPlanning: React.FC = () => {
     risks: [],
   };
 
-  const tabs = [
-    { name: 'Workflow', component: PPWorkflow, dataKey: 'workflow' as keyof ProjectPlanningData },
-    { name: 'Details', component: PPDetails, dataKey: 'details' as keyof ProjectPlanningData },
-    { name: 'Action Plan', component: PPActionPlan, dataKey: 'actionPlan' as keyof ProjectPlanningData },
-    { name: 'Working Groups', component: PPWorkingGroups, dataKey: 'workingGroups' as keyof ProjectPlanningData },
-    { name: 'Assessment', component: PPAssessment, dataKey: 'assessment' as keyof ProjectPlanningData },
+  const navigationItems: NavigationItem[] = [
+    {
+      id: 'workflow',
+      name: 'Workflow',
+      component: PPWorkflow,
+      dataKey: 'workflow',
+      icon: DocumentTextIcon,
+      color: 'bg-purple-500',
+      status: 'In Progress',
+      description: 'Project workflow and navigation'
+    },
+    {
+      id: 'details',
+      name: 'Project Details',
+      component: PPDetails,
+      dataKey: 'details',
+      icon: DocumentTextIcon,
+      color: 'bg-blue-500',
+      status: 'Completed',
+      description: 'Project information and metadata'
+    },
+    {
+      id: 'action-plan',
+      name: 'Action Plan',
+      component: PPActionPlan,
+      dataKey: 'actionPlan',
+      icon: ClipboardDocumentListIcon,
+      color: 'bg-green-500',
+      status: 'In Progress',
+      description: 'Task management and action items'
+    },
+    {
+      id: 'working-groups',
+      name: 'Working Groups',
+      component: PPWorkingGroups,
+      dataKey: 'workingGroups',
+      icon: UserGroupIcon,
+      color: 'bg-orange-500',
+      status: 'New',
+      description: 'Team collaboration and meetings'
+    },
+    {
+      id: 'assessment',
+      name: 'Assessment',
+      component: PPAssessment,
+      dataKey: 'assessment',
+      icon: ClipboardDocumentCheckIcon,
+      color: 'bg-yellow-500',
+      status: 'New',
+      description: 'Project evaluation and signoff'
+    },
+    {
+      id: 'players',
+      name: 'Players Chart',
+      component: PlayersChart,
+      dataKey: 'players',
+      icon: UsersIcon,
+      color: 'bg-indigo-500',
+      status: 'New',
+      description: 'Stakeholder mapping and roles'
+    },
+    {
+      id: 'issues',
+      name: 'Issues List',
+      component: IssuesList,
+      dataKey: 'issues',
+      icon: ExclamationTriangleIcon,
+      color: 'bg-red-500',
+      status: 'New',
+      description: 'Issue tracking and management'
+    },
+    {
+      id: 'register',
+      name: 'Risk Register',
+      component: RiskRegister,
+      dataKey: 'risks',
+      icon: ChartBarIcon,
+      color: 'bg-teal-500',
+      status: 'New',
+      description: 'Risk documentation and assessment'
+    }
   ];
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'New':
+        return 'bg-blue-100 text-blue-800';
+      case 'In Progress':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'Completed':
+        return 'bg-green-100 text-green-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'New':
+        return '●';
+      case 'In Progress':
+        return '●';
+      case 'Completed':
+        return '●';
+      default:
+        return '●';
+    }
+  };
 
   const updateProjectData = (section: keyof ProjectPlanningData, data: any) => {
     if (contextProjectData) {
@@ -161,14 +275,16 @@ const ProjectPlanning: React.FC = () => {
     );
   }
 
+  const activeItem = navigationItems[activeTab];
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-                           <header
-                className="bg-gradient-to-r from-indigo-700 to-indigo-800 text-white shadow-md"
-                role="banner"
-                aria-label="Application Header"
-              >
+      <header
+        className="bg-gradient-to-r from-indigo-700 to-indigo-800 text-white shadow-md"
+        role="banner"
+        aria-label="Application Header"
+      >
         <div className="px-6 py-4">
           <div className="flex justify-between items-center">
             <div className="flex-shrink-0">
@@ -180,7 +296,7 @@ const ProjectPlanning: React.FC = () => {
             <div className="flex-shrink-0">
               <button
                 onClick={handleBackClick}
-                                 className="p-2 text-white hover:text-indigo-100 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 rounded-md transition-colors duration-200"
+                className="p-2 text-white hover:text-indigo-100 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 rounded-md transition-colors duration-200"
                 aria-label="Return to main navigation"
               >
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -202,22 +318,49 @@ const ProjectPlanning: React.FC = () => {
           <div className="p-4">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Navigation</h3>
             <div className="flex flex-col space-y-2">
-              {tabs.map((tab, index) => (
-                <button
-                  key={tab.name}
-                  onClick={() => setActiveTab(index)}
-                  className={classNames(
-                    'w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-colors duration-200',
-                    'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
-                    activeTab === index
-                      ? 'bg-blue-100 text-blue-700 font-semibold'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                  )}
-                  role="tab"
-                  aria-selected={activeTab === index}
-                >
-                  {tab.name}
-                </button>
+              {navigationItems.map((item, index) => (
+                <div key={item.id} className="relative group">
+                  <button
+                    onClick={() => setActiveTab(index)}
+                    className={classNames(
+                      'w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200',
+                      'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
+                      'hover:shadow-md transform hover:scale-105',
+                      activeTab === index
+                        ? 'bg-blue-100 text-blue-700 font-semibold shadow-md'
+                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                    )}
+                    role="tab"
+                    aria-selected={activeTab === index}
+                    aria-label={`Navigate to ${item.name} module`}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <div className={`p-2 rounded-lg ${item.color} text-white flex-shrink-0`}>
+                        <item.icon className="h-5 w-5" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between">
+                          <span className="truncate">{item.name}</span>
+                          <div className={`ml-2 px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(item.status)}`}>
+                            {getStatusIcon(item.status)}
+                          </div>
+                        </div>
+                        <p className="text-xs text-gray-500 mt-1 truncate">{item.description}</p>
+                      </div>
+                      <ChevronRightIcon className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                    </div>
+                  </button>
+                  
+                  {/* Tooltip */}
+                  <div className="absolute left-full ml-2 top-1/2 transform -translate-y-1/2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+                    <div className="bg-gray-900 text-white text-xs rounded py-2 px-3 whitespace-nowrap">
+                      <div className="font-medium">{item.name}</div>
+                      <div className="text-gray-300">{item.description}</div>
+                      <div className="text-gray-400 mt-1">Status: {item.status}</div>
+                    </div>
+                    <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1 w-0 h-0 border-l-4 border-l-gray-900 border-t-4 border-t-transparent border-b-4 border-b-transparent"></div>
+                  </div>
+                </div>
               ))}
             </div>
           </div>
@@ -227,9 +370,9 @@ const ProjectPlanning: React.FC = () => {
         <div className="flex-1 bg-gray-50 p-6">
           <div className="bg-white rounded-lg shadow-lg overflow-hidden">
             <div className="p-6">
-              {tabs[activeTab] && React.createElement(tabs[activeTab].component, {
-                data: projectData[tabs[activeTab].dataKey] as any,
-                updateData: (data: any) => updateProjectData(tabs[activeTab].dataKey, data),
+              {activeItem && React.createElement(activeItem.component, {
+                data: projectData[activeItem.dataKey] as any,
+                updateData: (data: any) => updateProjectData(activeItem.dataKey, data),
                 projectData: projectData
               })}
             </div>
