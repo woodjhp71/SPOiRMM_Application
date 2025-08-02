@@ -12,7 +12,7 @@ const DepartmentsPage: React.FC = () => {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header
-        className="bg-gradient-to-r from-gray-800 to-gray-900 text-white shadow-md"
+        className="bg-gradient-to-r from-green-600 to-green-700 text-white shadow-md"
         role="banner"
         aria-label="Application Header"
       >
@@ -27,7 +27,7 @@ const DepartmentsPage: React.FC = () => {
             <div className="flex-shrink-0">
               <button
                 onClick={handleBackClick}
-                className="p-2 text-white hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 rounded-md transition-colors duration-200"
+                className="p-2 text-white hover:text-green-100 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 rounded-md transition-colors duration-200"
                 aria-label="Return to organization setup"
               >
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -40,29 +40,37 @@ const DepartmentsPage: React.FC = () => {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          <div className="px-6 py-5 border-b border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900">Departments</h3>
-            <p className="text-sm text-gray-600 mt-1">
-              Manage organizational departments and their functions
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            Departments Module
+          </h2>
+          <p className="text-lg text-gray-600">Manage organizational departments and their functions</p>
+        </div>
+
+        {/* Placeholder Content */}
+        <div className="bg-white rounded-lg shadow-lg p-8">
+          <div className="text-center">
+            <div className="w-16 h-16 bg-green-500 rounded-full mx-auto mb-4 flex items-center justify-center">
+              <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-4">Coming Soon</h3>
+            <p className="text-gray-600 mb-6">
+              The Departments module will allow you to manage organizational departments, their functions, 
+              and performance metrics within your risk management framework.
             </p>
-          </div>
-          <div className="p-6">
-            <div className="text-center py-12">
-              <h4 className="text-xl font-medium text-gray-900 mb-4">Departments Management</h4>
-              <p className="text-gray-600 mb-8">
-                This module allows you to manage organizational departments, their functions, and performance metrics.
-              </p>
-              <div className="bg-gray-50 rounded-lg p-6 max-w-md mx-auto">
-                <h5 className="text-lg font-medium text-gray-900 mb-4">Features Coming Soon</h5>
-                <ul className="text-sm text-gray-600 space-y-2">
-                  <li>• Department workflow management</li>
-                  <li>• Department registry and documentation</li>
-                  <li>• Internal functions mapping</li>
-                  <li>• Performance metrics tracking</li>
-                </ul>
-              </div>
+            <div className="bg-gray-50 rounded-lg p-6">
+              <h4 className="font-semibold text-gray-900 mb-3">Planned Features:</h4>
+              <ul className="text-left text-gray-600 space-y-2">
+                <li>• Department workflow management</li>
+                <li>• Department registry and documentation</li>
+                <li>• Internal functions mapping</li>
+                <li>• Performance metrics tracking</li>
+                <li>• Department hierarchy management</li>
+                <li>• Cross-department collaboration tools</li>
+              </ul>
             </div>
           </div>
         </div>
