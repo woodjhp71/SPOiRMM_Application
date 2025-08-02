@@ -155,7 +155,7 @@ const fetchProject = async (projectId: string): Promise<FullProjectData> => {
         projectManager: 'Lisa Chen',
         riskPlanSponsor: 'David Brown',
         riskPlanCoordinator: 'Lisa Chen',
-        projectStatus: 'Approved',
+        projectStatus: 'In Progress',
         planApproved: true,
         approvalDate: '2023-12-15',
         projectDescription: 'Update compliance framework to meet new regulatory requirements',
