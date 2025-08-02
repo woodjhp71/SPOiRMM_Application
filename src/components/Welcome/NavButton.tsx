@@ -14,8 +14,8 @@ const NavButton: React.FC<NavButtonProps> = ({ label, color, navigateTo, descrip
   const getColorClasses = (color: string) => {
     const colorMap = {
       blue: {
-        bg: 'bg-blue-500',
-        hover: 'hover:bg-blue-600',
+        bg: 'bg-blue-700',
+        hover: 'hover:bg-blue-800',
         border: 'border-blue-200',
         text: 'text-blue-700',
         icon: 'text-blue-500'

@@ -10,7 +10,7 @@ const Welcome: React.FC = () => {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header 
-        className="bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-md"
+        className="bg-gradient-to-r from-sky-500 to-sky-600 text-white shadow-md"
         role="banner"
         aria-label="Application Header"
       >
@@ -46,7 +46,7 @@ const Welcome: React.FC = () => {
           />
           <NavButton
             label="Planning"
-            color="red"
+            color="blue"
             navigateTo="/planning"
             description="Access project planning tools and risk assessment modules"
           />

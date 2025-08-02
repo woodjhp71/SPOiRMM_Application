@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import { Tab } from '@headlessui/react';
 import { classNames } from '../../utils/classNames';
 import { useProject as useProjectContext } from '../../contexts/ProjectContext';
@@ -60,8 +60,13 @@ export interface ProjectPlanningData {
 const ProjectPlanning: React.FC = () => {
   const { projectId } = useParams<{ projectId: string }>();
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const { projectData: contextProjectData, loadProjectData } = useProjectContext();
   const { data: apiProjectData, isLoading, error } = useProjectData(projectId || '');
+
+  const handleBackClick = () => {
+    navigate('/');
+  };
   
   // Get the tab parameter from URL and set initial active tab
   const tabParam = searchParams.get('tab');
@@ -162,16 +167,38 @@ const ProjectPlanning: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4">
-            <h1 className="text-2xl font-bold text-white">
-              Project Planning - SPOiRMM
-            </h1>
-            <p className="text-blue-100 mt-1">
-              Risk Management Project Planning and Governance
-            </p>
+      {/* Header */}
+             <header 
+         className="bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md"
+         role="banner"
+         aria-label="Application Header"
+       >
+        <div className="px-6 py-4">
+          <div className="flex justify-between items-center">
+            <div className="flex-shrink-0">
+              <h1 className="text-2xl font-bold text-white">SPOiRMM</h1>
+            </div>
+            <div className="text-center flex-1">
+              <h2 className="text-2xl font-bold text-white">Risk Management Project Planning and Governance</h2>
+            </div>
+            <div className="flex-shrink-0">
+              <button
+                onClick={handleBackClick}
+                                 className="p-2 text-white hover:text-blue-100 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 rounded-md transition-colors duration-200"
+                aria-label="Return to main navigation"
+              >
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+              </button>
+            </div>
           </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
 
           <Tab.Group selectedIndex={activeTab} onChange={setActiveTab}>
             <Tab.List className="flex space-x-1 bg-gray-100 p-1">
@@ -211,7 +238,28 @@ const ProjectPlanning: React.FC = () => {
             </Tab.Panels>
           </Tab.Group>
         </div>
-      </div>
+
+        {/* Back Button */}
+        <div className="text-center mt-8">
+          <button
+            onClick={handleBackClick}
+            className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-sky-500 hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 transition-colors duration-200"
+            aria-label="Return to main navigation"
+          >
+            <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Main Menu
+          </button>
+        </div>
+
+        {/* Footer Info */}
+        <div className="mt-12 text-center">
+          <p className="text-sm text-gray-500">
+            SPOiRMM - Strategic Planning of Integrated Risk Management Model
+          </p>
+        </div>
+      </main>
     </div>
   );
 };

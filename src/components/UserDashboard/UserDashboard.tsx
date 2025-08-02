@@ -609,19 +609,26 @@ const UserDashboard: React.FC = () => {
                      </div>
          </div>
 
-         {/* Back Button */}
-         <div className="text-center mt-8">
-           <button
-             onClick={handleBackClick}
-                            className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-slate-600 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 transition-colors duration-200"
-             aria-label="Return to main navigation"
-           >
-             <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-             </svg>
-             Back to Main Menu
-           </button>
-         </div>
+                   {/* Back Button */}
+          <div className="text-center mt-8">
+            <button
+              onClick={handleBackClick}
+                             className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-sky-500 hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 transition-colors duration-200"
+              aria-label="Return to main navigation"
+            >
+              <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+              Back to Main Menu
+            </button>
+          </div>
+
+          {/* Footer Info */}
+          <div className="mt-12 text-center">
+            <p className="text-sm text-gray-500">
+              SPOiRMM - Strategic Planning of Integrated Risk Management Model
+            </p>
+          </div>
        </main>
      </div>
    );
