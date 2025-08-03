@@ -1,0 +1,44 @@
+# Environment variables (should be set in Vercel dashboard)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+vercel-env-setup.md
+
+# Firebase local files
+.firebase/
+firebase-debug.log
+firebase-debug.*.log
+
+# Development files
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE files
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build artifacts (Vercel will build these)
+dist
+build
+
+# Test files
+coverage
+.nyc_output
+
+# Documentation
+README.md
+*.md
+docs/
+
+# Reference documents (not needed in production)
+Reference_Documents/ 
