@@ -10,7 +10,6 @@ import PPWorkingGroups from './modules/PPWorkingGroups';
 import PPAssessment from './modules/PPAssessment';
 import IssuesList from '../IssuesList/IssuesList';
 import RiskRegister from '../RiskRegister/RiskRegister';
-import { Player } from '../PlayersChart/PlayersChart';
 import { Issue } from '../IssuesList/IssuesList';
 import { Risk } from '../RiskRegister/RiskRegister';
 import {
@@ -62,7 +61,6 @@ export interface ProjectPlanningData {
     projectManagerSignoff: boolean;
     signoffDate: string;
   };
-  players: Player[];
   issues: Issue[];
   risks: Risk[];
 }
@@ -143,7 +141,6 @@ const ProjectPlanning: React.FC = () => {
       projectManagerSignoff: false,
       signoffDate: '',
     },
-    players: [],
     issues: [],
     risks: [],
   };
