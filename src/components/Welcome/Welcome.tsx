@@ -45,10 +45,10 @@ const Welcome: React.FC = () => {
             description="View your personalized dashboard with projects, action items, and key metrics"
           />
           <NavButton
-            label="Planning"
-            color="denim-blue"
-            navigateTo="/planning"
-            description="Access project planning tools and risk assessment modules"
+            label="Project Workflow"
+            color="indigo"
+            navigateTo="/workflow"
+            description="Track project progress, manage workflow stages, and view detailed statistics"
           />
           <NavButton
             label="Reports"
