@@ -45,7 +45,7 @@ const DepartmentsPage: React.FC = () => {
           <h2 className="text-3xl font-bold text-gray-900 mb-4">
             Departments Module
           </h2>
-          <p className="text-lg text-gray-600">Manage organizational departments and their functions</p>
+          <p className="text-lg text-gray-600">Define internal departments classified as L1, L2, or L3 functions</p>
         </div>
 
         {/* Placeholder Content */}
@@ -58,18 +58,19 @@ const DepartmentsPage: React.FC = () => {
             </div>
             <h3 className="text-xl font-semibold text-gray-900 mb-4">Coming Soon</h3>
             <p className="text-gray-600 mb-6">
-              The Departments module will allow you to manage organizational departments, their functions, 
-              and performance metrics within your risk management framework.
+              The Departments module will allow you to define internal departments classified as L1, L2, or L3 functions 
+              for your organization's risk management framework.
             </p>
             <div className="bg-gray-50 rounded-lg p-6">
               <h4 className="font-semibold text-gray-900 mb-3">Planned Features:</h4>
               <ul className="text-left text-gray-600 space-y-2">
+                <li>• Define internal departments and their functions</li>
+                <li>• Classify departments as L1, L2, or L3 functions</li>
                 <li>• Department workflow management</li>
                 <li>• Department registry and documentation</li>
                 <li>• Internal functions mapping</li>
                 <li>• Performance metrics tracking</li>
-                <li>• Department hierarchy management</li>
-                <li>• Cross-department collaboration tools</li>
+                <li>• Department hierarchy and reporting structure</li>
               </ul>
             </div>
           </div>
@@ -79,7 +80,7 @@ const DepartmentsPage: React.FC = () => {
         <div className="text-center mt-8">
           <button
             onClick={handleBackClick}
-            className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200"
+            className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-sky-500 hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 transition-colors duration-200"
             aria-label="Return to organization setup"
           >
             <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
