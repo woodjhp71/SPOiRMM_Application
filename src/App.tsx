@@ -6,6 +6,7 @@ import PlayersChart from './components/PlayersChart/PlayersChart';
 import IssuesList from './components/IssuesList/IssuesList';
 import RiskRegister from './components/RiskRegister/RiskRegister';
 import PlayersChartPage from './components/PlayersChartPage/PlayersChartPage';
+import ProjectWorkflow from './components/ProjectWorkflow/ProjectWorkflow';
 
 import ProjectsList from './components/ProjectsList/ProjectsList';
 import Welcome from './components/Welcome';
@@ -38,6 +39,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Welcome />} />
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/workflow" element={<ProjectWorkflow />} />
               <Route path="/planning" element={<Planning />} />
               <Route path="/reports" element={<ReportsPage />} />
               <Route path="/admin" element={<AdminSettingsPage />} />

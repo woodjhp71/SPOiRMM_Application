@@ -19,7 +19,8 @@ import {
   ClipboardDocumentCheckIcon,
   ExclamationTriangleIcon,
   ChartBarIcon,
-  ChevronRightIcon
+  ChevronRightIcon,
+  UsersIcon
 } from '@heroicons/react/24/outline';
 
 export interface ProjectPlanningData {
@@ -61,6 +62,7 @@ export interface ProjectPlanningData {
     projectManagerSignoff: boolean;
     signoffDate: string;
   };
+  playersChart: any;
   issues: Issue[];
   risks: Risk[];
 }
@@ -95,8 +97,9 @@ const ProjectPlanning: React.FC = () => {
     if (tabParam === 'details') return 1;
     if (tabParam === 'action-plan') return 2;
     if (tabParam === 'assessment') return 4;
-    if (tabParam === 'issues') return 5;
-    if (tabParam === 'register') return 6;
+    if (tabParam === 'players-chart') return 5;
+    if (tabParam === 'issues') return 6;
+    if (tabParam === 'register') return 7;
     return 0; // Default to first tab
   };
   
@@ -141,6 +144,7 @@ const ProjectPlanning: React.FC = () => {
       projectManagerSignoff: false,
       signoffDate: '',
     },
+    playersChart: {},
     issues: [],
     risks: [],
   };
@@ -195,6 +199,16 @@ const ProjectPlanning: React.FC = () => {
       color: 'bg-yellow-500',
       status: 'New',
       description: 'Project evaluation and signoff'
+    },
+    {
+      id: 'players-chart',
+      name: 'Players Chart',
+      component: () => <div>Players Chart Component - Organization Level Integration</div>,
+      dataKey: 'playersChart',
+      icon: UsersIcon,
+      color: 'bg-indigo-500',
+      status: 'New',
+      description: 'Stakeholder mapping and roles'
     },
     {
       id: 'issues',
