@@ -1,0 +1,78 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function hasRole(role) {
+      return isAuthenticated() && 
+             request.auth.token.role == role;
+    }
+    
+    function isSuperuser() {
+      return isAuthenticated() && 
+             request.auth.token.role == 'superuser';
+    }
+    
+    function isValidFileType() {
+      // Allowed file extensions
+      return request.resource.contentType.matches('application/pdf') ||
+             request.resource.contentType.matches('application/vnd.openxmlformats-officedocument.wordprocessingml.document') ||
+             request.resource.contentType.matches('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') ||
+             request.resource.contentType.matches('text/markdown') ||
+             request.resource.contentType.matches('text/plain') ||
+             request.resource.contentType.matches('image/jpeg') ||
+             request.resource.contentType.matches('image/png') ||
+             request.resource.contentType.matches('image/bmp');
+    }
+    
+    function isValidFileSize() {
+      // 10MB limit
+      return request.resource.size <= 10 * 1024 * 1024;
+    }
+    
+    function isBlockedFileType() {
+      // Blocked file extensions
+      return request.resource.name.matches('.*\\.(js|exe|bat|cmd|com|pif|scr|vbs|jar|dll|sys|bin|sh|ps1|py|php|asp|jsp|html|htm|xml|json|css|scss|less|ts|jsx|tsx|vue|svelte|angular|react|node|npm|yarn|git|svn|zip|rar|7z|tar|gz|bz2|iso|img|vhd|vmdk|ova|ovf|qcow2|raw|vdi|vbox|vmx|vmsd|vmsn|vmss|nvram|efi|boot|grub|lilo|syslinux|isolinux|pxelinux|memtest|memtest86|memtest86\\+|memtest86\\+\\+)$');
+    }
+    
+    // Organization files
+    match /organizations/{orgId}/{allPaths=**} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && 
+                      (hasRole('admin') || hasRole('superuser')) &&
+                      isValidFileType() &&
+                      isValidFileSize() &&
+                      !isBlockedFileType();
+    }
+    
+    // Project files
+    match /projects/{projectId}/{allPaths=**} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && 
+                      (hasRole('admin') || hasRole('superuser')) &&
+                      isValidFileType() &&
+                      isValidFileSize() &&
+                      !isBlockedFileType();
+    }
+    
+    // User profile files
+    match /users/{userId}/{allPaths=**} {
+      allow read: if isAuthenticated() && 
+                     (request.auth.uid == userId || hasRole('admin') || hasRole('superuser'));
+      allow write: if isAuthenticated() && 
+                      (request.auth.uid == userId || hasRole('admin') || hasRole('superuser')) &&
+                      isValidFileType() &&
+                      isValidFileSize() &&
+                      !isBlockedFileType();
+    }
+    
+    // System files (admin only)
+    match /system/{allPaths=**} {
+      allow read: if hasRole('admin') || hasRole('superuser');
+      allow write: if hasRole('admin') || hasRole('superuser');
+    }
+  }
+} 

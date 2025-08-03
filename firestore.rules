@@ -1,0 +1,149 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isInOrganization(orgId) {
+      return isAuthenticated() && 
+             request.auth.token.organizationId == orgId;
+    }
+    
+    function hasRole(role) {
+      return isAuthenticated() && 
+             request.auth.token.role == role;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && 
+             request.auth.uid == userId;
+    }
+    
+    function isSuperuser() {
+      return isAuthenticated() && 
+             request.auth.token.role == 'superuser';
+    }
+    
+    // Organizations collection
+    match /organizations/{orgId} {
+      allow read: if isInOrganization(orgId) || isSuperuser();
+      allow write: if isInOrganization(orgId) && 
+                      (hasRole('admin') || hasRole('superuser'));
+      
+      // Organization subcollections
+      match /agreements/{docId} {
+        allow read: if isInOrganization(orgId);
+        allow write: if isInOrganization(orgId) && 
+                        (hasRole('admin') || hasRole('superuser'));
+      }
+      
+      match /policies/{docId} {
+        allow read: if isInOrganization(orgId);
+        allow write: if isInOrganization(orgId) && 
+                        (hasRole('admin') || hasRole('superuser'));
+      }
+      
+      match /settings/{docId} {
+        allow read: if isInOrganization(orgId);
+        allow write: if isInOrganization(orgId) && 
+                        (hasRole('admin') || hasRole('superuser'));
+      }
+      
+      match /auditLogs/{docId} {
+        allow read: if isInOrganization(orgId) && 
+                       (hasRole('admin') || hasRole('superuser'));
+        allow write: if isInOrganization(orgId) && 
+                        (hasRole('admin') || hasRole('superuser'));
+      }
+    }
+    
+    // Users collection
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isSuperuser();
+      allow write: if isOwner(userId) || isSuperuser();
+    }
+    
+    // System configurations
+    match /systemConfigs/{docId} {
+      allow read: if isAuthenticated();
+      allow write: if isSuperuser();
+    }
+    
+    // Players collection
+    match /players/{playerId} {
+      allow read: if isAuthenticated();
+      allow write: if hasRole('admin') || hasRole('superuser');
+    }
+    
+    // Departments collection
+    match /departments/{deptId} {
+      allow read: if isAuthenticated();
+      allow write: if hasRole('admin') || hasRole('superuser');
+      
+      // Department subcollections
+      match /internalFunctions/{docId} {
+        allow read: if isAuthenticated();
+        allow write: if hasRole('admin') || hasRole('superuser');
+      }
+      
+      match /performanceMetrics/{docId} {
+        allow read: if isAuthenticated();
+        allow write: if hasRole('admin') || hasRole('superuser');
+      }
+    }
+    
+    // Projects collection
+    match /projects/{projectId} {
+      allow read: if isAuthenticated();
+      allow write: if hasRole('admin') || hasRole('superuser');
+      
+      // Project subcollections
+      match /actionPlan/{docId} {
+        allow read: if isAuthenticated();
+        allow write: if hasRole('admin') || hasRole('superuser');
+      }
+      
+      match /workingGroups/{docId} {
+        allow read: if isAuthenticated();
+        allow write: if hasRole('admin') || hasRole('superuser');
+      }
+      
+      match /assessment/{docId} {
+        allow read: if isAuthenticated();
+        allow write: if hasRole('admin') || hasRole('superuser');
+      }
+    }
+    
+    // Issues collection
+    match /issues/{issueId} {
+      allow read: if isAuthenticated();
+      allow write: if hasRole('admin') || hasRole('superuser');
+    }
+    
+    // Risks collection
+    match /risks/{riskId} {
+      allow read: if isAuthenticated();
+      allow write: if hasRole('admin') || hasRole('superuser');
+    }
+    
+    // Audit log exports
+    match /auditLogExports/{docId} {
+      allow read: if hasRole('admin') || hasRole('superuser');
+      allow write: if hasRole('admin') || hasRole('superuser');
+    }
+    
+    // Export jobs
+    match /exportJobs/{docId} {
+      allow read: if hasRole('admin') || hasRole('superuser');
+      allow write: if hasRole('admin') || hasRole('superuser');
+    }
+    
+    // Import jobs
+    match /importJobs/{docId} {
+      allow read: if hasRole('admin') || hasRole('superuser');
+      allow write: if hasRole('admin') || hasRole('superuser');
+    }
+  }
+} 

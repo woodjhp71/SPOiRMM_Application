@@ -613,6 +613,22 @@ const firebaseConfig = {
   appId: process.env.VITE_FIREBASE_APP_ID
 };
 
+// Validate required environment variables
+const requiredEnvVars = [
+  'VITE_FIREBASE_API_KEY',
+  'VITE_FIREBASE_AUTH_DOMAIN',
+  'VITE_FIREBASE_PROJECT_ID',
+  'VITE_FIREBASE_STORAGE_BUCKET',
+  'VITE_FIREBASE_MESSAGING_SENDER_ID',
+  'VITE_FIREBASE_APP_ID'
+];
+
+const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
+
+if (missingVars.length > 0) {
+  throw new Error(`Missing required environment variables: ${missingVars.join(', ')}`);
+}
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
@@ -620,9 +636,14 @@ const storage = getStorage(app);
 
 // Connect to emulators in development
 if (process.env.NODE_ENV === 'development') {
-  connectFirestoreEmulator(db, 'localhost', 8080);
-  connectAuthEmulator(auth, 'http://localhost:9099');
-  connectStorageEmulator(storage, 'localhost', 9199);
+  try {
+    connectFirestoreEmulator(db, 'localhost', 8080);
+    connectAuthEmulator(auth, 'http://localhost:9099');
+    connectStorageEmulator(storage, 'localhost', 9199);
+    console.log('Connected to Firebase emulators');
+  } catch (error) {
+    console.log('Firebase emulators not running, using production Firebase');
+  }
 }
 
 export { db, auth, storage };
@@ -631,13 +652,42 @@ export { db, auth, storage };
 #### 5.2.2 Environment Variables Template
 ```bash
 # .env.local
-VITE_FIREBASE_API_KEY=your_api_key
-VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
-VITE_FIREBASE_PROJECT_ID=your_project_id
-VITE_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
-VITE_FIREBASE_MESSAGING_SENDER_ID=123456789
-VITE_FIREBASE_APP_ID=your_app_id
+VITE_FIREBASE_API_KEY=AIzaSyDFMm6CpAYcKECrK_AArNu3scEoPbSRYyc
+VITE_FIREBASE_AUTH_DOMAIN=spoirmm.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=spoirmm
+VITE_FIREBASE_STORAGE_BUCKET=spoirmm.firebasestorage.app
+VITE_FIREBASE_MESSAGING_SENDER_ID=622607729589
+VITE_FIREBASE_APP_ID=1:622607729589:web:c8ef4216c5aa2bcf8acffc
 ```
+
+#### 5.2.3 Environment Variables for Vercel Deployment
+```bash
+# Set these in Vercel Dashboard → Settings → Environment Variables
+VITE_FIREBASE_API_KEY=AIzaSyDFMm6CpAYcKECrK_AArNu3scEoPbSRYyc
+VITE_FIREBASE_AUTH_DOMAIN=spoirmm.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=spoirmm
+VITE_FIREBASE_STORAGE_BUCKET=spoirmm.firebasestorage.app
+VITE_FIREBASE_MESSAGING_SENDER_ID=622607729589
+VITE_FIREBASE_APP_ID=1:622607729589:web:c8ef4216c5aa2bcf8acffc
+```
+
+#### 5.2.4 Security Configuration
+- Environment variables are stored in `.env.local` (ignored by git)
+- Vercel deployment uses dashboard environment variables
+- `vercel-env-setup.md` contains setup instructions (ignored by git and Vercel)
+- Environment variable validation implemented in Firebase config
+
+#### 5.2.5 Primary Admin User Setup
+**Admin User Configuration:**
+- **Email:** spoirmmitc2@gmail.com
+- **Role:** Primary admin user
+- **Status:** Basic Firebase Auth configured
+- **Access Level:** Full administrative privileges
+
+**Notes:**
+- This user should be assigned the `admin` role in the `users` collection
+- Consider upgrading to `superuser` role for system-wide access
+- Authentication already configured in Firebase Console
 
 ### 5.3 Data Access Layer
 
