@@ -7,6 +7,7 @@ import { FullProjectData } from '../hooks/useProject';
 
 export interface ProjectData extends ProjectPlanningData {
   id: string;
+  players: Player[];
   issues: Issue[];
   risks: Risk[];
 }

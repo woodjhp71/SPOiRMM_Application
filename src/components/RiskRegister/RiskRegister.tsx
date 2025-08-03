@@ -26,6 +26,7 @@ export interface Risk {
   attachments: string[];
   createdBy: string;
   lastModified: string;
+  relatedPlayers?: string[]; // Array of player IDs from Players Chart
 }
 
 const RiskRegister: React.FC = () => {
@@ -54,7 +55,8 @@ const RiskRegister: React.FC = () => {
     reviewDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 30 days from now
     attachments: [],
     createdBy: 'current-user',
-    lastModified: new Date().toISOString()
+    lastModified: new Date().toISOString(),
+    relatedPlayers: []
   });
 
   // Available stakeholders and departments
@@ -140,7 +142,8 @@ const RiskRegister: React.FC = () => {
       reviewDate: newRisk.reviewDate!,
       attachments: newRisk.attachments || [],
       createdBy: newRisk.createdBy!,
-      lastModified: new Date().toISOString()
+      lastModified: new Date().toISOString(),
+      relatedPlayers: newRisk.relatedPlayers || []
     };
 
     setRisks([...risks, risk]);
@@ -161,7 +164,8 @@ const RiskRegister: React.FC = () => {
       reviewDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
       attachments: [],
       createdBy: 'current-user',
-      lastModified: new Date().toISOString()
+      lastModified: new Date().toISOString(),
+      relatedPlayers: []
     });
     setIsAddingRisk(false);
     setErrors({});
