@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { ProjectPlanningData } from '../components/ProjectPlanning/ProjectPlanning';
+import { Player } from '../components/PlayersChart/PlayersChart';
 
 export interface FullProjectData extends ProjectPlanningData {
   id: string;
@@ -8,6 +9,7 @@ export interface FullProjectData extends ProjectPlanningData {
   sponsor: string;
   coordinator: string;
   progress: number;
+  players: Player[];
 }
 
 const fetchProject = async (projectId: string): Promise<FullProjectData> => {

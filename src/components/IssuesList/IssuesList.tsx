@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useProject } from '../../contexts/ProjectContext';
+import { Player } from '../PlayersChart/PlayersChart';
 import {
   PlusIcon,
   MagnifyingGlassIcon,
   ExclamationTriangleIcon,
-  ArrowLeftIcon
+  ArrowLeftIcon,
+  InformationCircleIcon
 } from '@heroicons/react/24/outline';
 
 export interface Issue {
@@ -14,6 +16,7 @@ export interface Issue {
   raisedBy: string;
   players: string[];
   tools: string[];
+  relatedPlayers: string[]; // Array of player IDs from Players Chart
   internalFunctionLevel: 'L1' | 'L2' | 'L3';
   category: 'Governance' | 'Business' | 'Operational';
   dateRaised: string;
@@ -24,7 +27,7 @@ export interface Issue {
 const IssuesList: React.FC = () => {
   const { id: projectId } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { projectData, updateIssues } = useProject();
+  const { projectData, updateIssues, updateRisks } = useProject();
 
   const [issues, setIssues] = useState<Issue[]>(projectData?.issues || []);
   const [isAddingIssue, setIsAddingIssue] = useState(false);
@@ -40,6 +43,7 @@ const IssuesList: React.FC = () => {
     raisedBy: '',
     players: [],
     tools: [],
+    relatedPlayers: [],
     internalFunctionLevel: 'L1',
     category: 'Governance',
     dateRaised: new Date().toISOString().split('T')[0],
@@ -50,6 +54,9 @@ const IssuesList: React.FC = () => {
   // Available players and tools for selection
   const availablePlayers = ['Recipient', 'Provider', 'Staff', 'Supplier', 'Regulator', 'Representative'];
   const availableTools = ['Jurisdiction', 'Market', 'Enterprise', 'Organisation', 'Agreements', 'Resources'];
+
+  // Get players from the project's Players Chart
+  const projectPlayers = projectData?.players || [];
 
   // Mock team members for raisedBy dropdown
   const mockTeamMembers = [
@@ -98,6 +105,7 @@ const IssuesList: React.FC = () => {
       raisedBy: newIssue.raisedBy!,
       players: newIssue.players!,
       tools: newIssue.tools!,
+      relatedPlayers: newIssue.relatedPlayers || [],
       internalFunctionLevel: newIssue.internalFunctionLevel!,
       category: newIssue.category!,
       dateRaised: newIssue.dateRaised!,
@@ -111,6 +119,7 @@ const IssuesList: React.FC = () => {
       raisedBy: '',
       players: [],
       tools: [],
+      relatedPlayers: [],
       internalFunctionLevel: 'L1',
       category: 'Governance',
       dateRaised: new Date().toISOString().split('T')[0],
@@ -119,6 +128,51 @@ const IssuesList: React.FC = () => {
     });
     setIsAddingIssue(false);
     setErrors({});
+  };
+
+  const promoteToRisk = (issue: Issue) => {
+    // Create a new risk from the issue
+    const newRisk = {
+      id: Date.now().toString(),
+      projectId: projectId || '',
+      issueDescription: issue.description,
+      riskStatement: issue.description, // Use issue description as initial risk statement
+      riskCategory: issue.category,
+      spoirmmToolContext: issue.tools[0] as any || 'Jurisdiction', // Use first tool as context
+      externalStakeholders: issue.players,
+      internalDepartments: [issue.internalFunctionLevel],
+      likelihood: 3, // Default values
+      consequence: 3,
+      riskScore: 9,
+      riskEvaluation: 'Medium' as const,
+      mitigationStrategy: 'To be developed based on issue analysis',
+      accountablePerson: issue.raisedBy,
+      status: 'New' as const,
+      reviewDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      attachments: [],
+      createdBy: issue.raisedBy,
+      lastModified: new Date().toISOString(),
+      relatedPlayers: issue.relatedPlayers // Carry forward related players
+    };
+
+    // Add the new risk to the risk register
+    const currentRisks = projectData?.risks || [];
+    updateRisks([...currentRisks, newRisk]);
+
+    // Update the issue status to AcceptedAsRisk
+    const updatedIssues = issues.map(i => 
+      i.id === issue.id ? { ...i, status: 'AcceptedAsRisk' as const } : i
+    );
+    setIssues(updatedIssues);
+  };
+
+  // Helper function to get player display name
+  const getPlayerDisplayName = (playerId: string) => {
+    const player = projectPlayers.find((p: Player) => p.id === playerId);
+    if (player) {
+      return `${player.playerName} (${player.playerType} | ${player.entityNature})`;
+    }
+    return playerId;
   };
 
   return (
@@ -349,6 +403,46 @@ const IssuesList: React.FC = () => {
                   )}
                 </div>
 
+                                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                    Related Player(s)
+                    <div className="relative ml-1 group">
+                      <InformationCircleIcon className="h-4 w-4 text-gray-400 cursor-help" />
+                      <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10">
+                        Recommend selecting at least one player
+                        <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-800"></div>
+                      </div>
+                    </div>
+                  </label>
+                  <div className="border border-gray-300 rounded-md p-3 max-h-48 overflow-y-auto">
+                    {projectPlayers.length === 0 ? (
+                      <p className="text-gray-500 text-sm">No players available. Add players to the Players Chart first.</p>
+                    ) : (
+                      projectPlayers.map((player: Player) => (
+                        <label key={player.id} className="flex items-center space-x-2 py-1">
+                          <input
+                            type="checkbox"
+                            checked={newIssue.relatedPlayers?.includes(player.id) || false}
+                            onChange={(e) => {
+                              const updatedPlayers = e.target.checked
+                                ? [...(newIssue.relatedPlayers || []), player.id]
+                                : (newIssue.relatedPlayers || []).filter(id => id !== player.id);
+                              setNewIssue({ ...newIssue, relatedPlayers: updatedPlayers });
+                            }}
+                            className="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded"
+                          />
+                          <span className="text-sm text-gray-700">{getPlayerDisplayName(player.id)}</span>
+                        </label>
+                      ))
+                    )}
+                  </div>
+                  {newIssue.relatedPlayers && newIssue.relatedPlayers.length > 0 && (
+                    <p className="mt-2 text-sm text-gray-600">
+                      Selected: {newIssue.relatedPlayers.length} player(s)
+                    </p>
+                  )}
+                </div>
+
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Notes
@@ -372,6 +466,7 @@ const IssuesList: React.FC = () => {
                       raisedBy: '',
                       players: [],
                       tools: [],
+                      relatedPlayers: [],
                       internalFunctionLevel: 'L1',
                       category: 'Governance',
                       dateRaised: new Date().toISOString().split('T')[0],
@@ -437,12 +532,24 @@ const IssuesList: React.FC = () => {
                               {tool}
                             </span>
                           ))}
+                          {issue.relatedPlayers && issue.relatedPlayers.length > 0 && (
+                            <div className="w-full mt-2">
+                              <span className="text-xs font-medium text-gray-600">Related Players:</span>
+                              <div className="flex flex-wrap gap-1 mt-1">
+                                {issue.relatedPlayers.map(playerId => (
+                                  <span key={playerId} className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-purple-100 text-purple-800">
+                                    {getPlayerDisplayName(playerId)}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          )}
                         </div>
                         {issue.notes && (
                           <p className="mt-2 text-sm text-gray-600">{issue.notes}</p>
                         )}
                       </div>
-                      <div className="ml-4">
+                      <div className="ml-4 flex items-center space-x-2">
                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                           issue.status === 'New' ? 'bg-blue-100 text-blue-800' :
                           issue.status === 'In Review' ? 'bg-yellow-100 text-yellow-800' :
@@ -451,6 +558,15 @@ const IssuesList: React.FC = () => {
                         }`}>
                           {issue.status}
                         </span>
+                        {issue.status !== 'AcceptedAsRisk' && issue.status !== 'Rejected' && (
+                          <button
+                            onClick={() => promoteToRisk(issue)}
+                            className="inline-flex items-center px-2 py-1 text-xs font-medium text-white bg-orange-600 rounded-md hover:bg-orange-700 transition-colors"
+                            title="Promote to Risk"
+                          >
+                            Promote to Risk
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>
