@@ -15,7 +15,7 @@ const requiredEnvVars = [
 ];
 
 // Check for missing environment variables
-const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
+const missingVars = requiredEnvVars.filter(varName => !import.meta.env[varName]);
 if (missingVars.length > 0) {
   console.error('Missing required Firebase environment variables:', missingVars);
   throw new Error(`Missing required Firebase environment variables: ${missingVars.join(', ')}`);
@@ -23,12 +23,12 @@ if (missingVars.length > 0) {
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: process.env.VITE_FIREBASE_API_KEY,
-  authDomain: process.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.VITE_FIREBASE_APP_ID
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
 // Initialize Firebase
@@ -39,8 +39,8 @@ export const db = getFirestore(app);
 export const auth = getAuth(app);
 export const storage = getStorage(app);
 
-// Connect to emulators in development
-if (process.env.NODE_ENV === 'development') {
+// Connect to emulators in development (only if explicitly enabled)
+if (import.meta.env.DEV && import.meta.env.VITE_USE_FIREBASE_EMULATORS === 'true') {
   try {
     // Firestore emulator
     connectFirestoreEmulator(db, 'localhost', 8080);
