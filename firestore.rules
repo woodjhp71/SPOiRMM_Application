@@ -8,12 +8,17 @@ service cloud.firestore {
     
     function isInOrganization(orgId) {
       return isAuthenticated() && 
-             request.auth.token.organizationId == orgId;
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.organizationId == orgId;
     }
     
     function hasRole(role) {
       return isAuthenticated() && 
-             request.auth.token.role == role;
+             role in get(/databases/$(database)/documents/users/$(request.auth.uid)).data.roles;
+    }
+    
+    function hasAnyRole(roles) {
+      return isAuthenticated() && 
+             (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.roles.hasAny(roles));
     }
     
     function isOwner(userId) {
@@ -21,129 +26,164 @@ service cloud.firestore {
              request.auth.uid == userId;
     }
     
+    function isAdmin() {
+      return hasRole('Admin');
+    }
+    
     function isSuperuser() {
       return isAuthenticated() && 
-             request.auth.token.role == 'superuser';
+             request.auth.uid == 'inUB6cwPmZTU49DZe949eLnT7wo1'; // Primary admin user
+    }
+    
+    function canManageUsers() {
+      return isAdmin() || isSuperuser();
+    }
+    
+    function canAccessAdminSettings() {
+      return isAdmin() || isSuperuser();
+    }
+    
+    // Users collection - Enhanced RBAC
+    match /users/{userId} {
+      // Users can read their own profile
+      allow read: if isOwner(userId);
+      
+      // Admins can read all users in their organization
+      allow read: if canManageUsers() && 
+                     isInOrganization(resource.data.organizationId);
+      
+      // Superuser can read all users
+      allow read: if isSuperuser();
+      
+      // Users can update their own profile (limited fields)
+      allow update: if isOwner(userId) && 
+                       request.resource.data.diff(resource.data).affectedKeys()
+                         .hasOnly(['displayName', 'lastLoginAt']);
+      
+      // Admins can update users in their organization
+      allow update: if canManageUsers() && 
+                       isInOrganization(resource.data.organizationId) &&
+                       isInOrganization(request.resource.data.organizationId);
+      
+      // Superuser can update any user
+      allow update: if isSuperuser();
+      
+      // Only superuser can create/delete users
+      allow create, delete: if isSuperuser();
     }
     
     // Organizations collection
     match /organizations/{orgId} {
       allow read: if isInOrganization(orgId) || isSuperuser();
       allow write: if isInOrganization(orgId) && 
-                      (hasRole('admin') || hasRole('superuser'));
+                      (isAdmin() || isSuperuser());
       
       // Organization subcollections
       match /agreements/{docId} {
         allow read: if isInOrganization(orgId);
         allow write: if isInOrganization(orgId) && 
-                        (hasRole('admin') || hasRole('superuser'));
+                        (isAdmin() || isSuperuser());
       }
       
       match /policies/{docId} {
         allow read: if isInOrganization(orgId);
         allow write: if isInOrganization(orgId) && 
-                        (hasRole('admin') || hasRole('superuser'));
+                        (isAdmin() || isSuperuser());
       }
       
       match /settings/{docId} {
         allow read: if isInOrganization(orgId);
         allow write: if isInOrganization(orgId) && 
-                        (hasRole('admin') || hasRole('superuser'));
+                        (isAdmin() || isSuperuser());
       }
       
       match /auditLogs/{docId} {
         allow read: if isInOrganization(orgId) && 
-                       (hasRole('admin') || hasRole('superuser'));
+                       (isAdmin() || isSuperuser());
         allow write: if isInOrganization(orgId) && 
-                        (hasRole('admin') || hasRole('superuser'));
+                        (isAdmin() || isSuperuser());
       }
-    }
-    
-    // Users collection
-    match /users/{userId} {
-      allow read: if isOwner(userId) || isSuperuser();
-      allow write: if isOwner(userId) || isSuperuser();
     }
     
     // System configurations
     match /systemConfigs/{docId} {
       allow read: if isAuthenticated();
-      allow write: if isSuperuser();
+      allow write: if canAccessAdminSettings();
     }
     
     // Players collection
     match /players/{playerId} {
       allow read: if isAuthenticated();
-      allow write: if hasRole('admin') || hasRole('superuser');
+      allow write: if isAdmin() || isSuperuser();
     }
     
     // Departments collection
     match /departments/{deptId} {
       allow read: if isAuthenticated();
-      allow write: if hasRole('admin') || hasRole('superuser');
+      allow write: if isAdmin() || isSuperuser();
       
       // Department subcollections
       match /internalFunctions/{docId} {
         allow read: if isAuthenticated();
-        allow write: if hasRole('admin') || hasRole('superuser');
+        allow write: if isAdmin() || isSuperuser();
       }
       
       match /performanceMetrics/{docId} {
         allow read: if isAuthenticated();
-        allow write: if hasRole('admin') || hasRole('superuser');
+        allow write: if isAdmin() || isSuperuser();
       }
     }
     
     // Projects collection
     match /projects/{projectId} {
       allow read: if isAuthenticated();
-      allow write: if hasRole('admin') || hasRole('superuser');
+      allow write: if isAdmin() || isSuperuser();
       
       // Project subcollections
       match /actionPlan/{docId} {
         allow read: if isAuthenticated();
-        allow write: if hasRole('admin') || hasRole('superuser');
+        allow write: if isAdmin() || isSuperuser();
       }
       
       match /workingGroups/{docId} {
         allow read: if isAuthenticated();
-        allow write: if hasRole('admin') || hasRole('superuser');
+        allow write: if isAdmin() || isSuperuser();
       }
       
       match /assessment/{docId} {
         allow read: if isAuthenticated();
-        allow write: if hasRole('admin') || hasRole('superuser');
+        allow write: if isAdmin() || isSuperuser();
       }
     }
     
     // Issues collection
     match /issues/{issueId} {
       allow read: if isAuthenticated();
-      allow write: if hasRole('admin') || hasRole('superuser');
+      allow write: if isAdmin() || isSuperuser();
     }
     
     // Risks collection
     match /risks/{riskId} {
       allow read: if isAuthenticated();
-      allow write: if hasRole('admin') || hasRole('superuser');
+      allow write: if isAdmin() || isSuperuser();
     }
     
     // Audit log exports
     match /auditLogExports/{docId} {
-      allow read: if hasRole('admin') || hasRole('superuser');
-      allow write: if hasRole('admin') || hasRole('superuser');
+      allow read: if isAdmin() || isSuperuser();
+      allow write: if isAdmin() || isSuperuser();
     }
     
     // Export jobs
     match /exportJobs/{docId} {
-      allow read: if hasRole('admin') || hasRole('superuser');
-      allow write: if hasRole('admin') || hasRole('superuser');
+      allow read: if isAdmin() || isSuperuser();
+      allow write: if isAdmin() || isSuperuser();
     }
     
     // Import jobs
     match /importJobs/{docId} {
-      allow read: if hasRole('admin') || hasRole('superuser');
-      allow write: if hasRole('admin') || hasRole('superuser');
+      allow read: if isAdmin() || isSuperuser();
+      allow write: if isAdmin() || isSuperuser();
     }
   }
 } 

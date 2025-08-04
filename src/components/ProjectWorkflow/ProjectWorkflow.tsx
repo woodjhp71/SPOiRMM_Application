@@ -5,7 +5,6 @@ import { useActiveProjects } from '../../hooks/useProjects';
 import { useProject as useProjectData } from '../../hooks/useProject';
 import WorkflowEngine from '../WorkflowEngine/WorkflowEngine';
 import ProjectCard from '../ProjectCard/ProjectCard';
-import Header from '../Header/Header';
 import {
   DocumentTextIcon,
   ExclamationTriangleIcon,
@@ -516,8 +515,34 @@ const ProjectWorkflow: React.FC<ProjectWorkflowProps> = ({
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Standardized Header */}
-      <Header title="Project Workflow Management" showUserInfo={true} />
+      {/* Header */}
+      <header
+        className="bg-gradient-to-r from-indigo-600 to-indigo-700 text-white shadow-md"
+        role="banner"
+        aria-label="Application Header"
+      >
+        <div className="px-6 py-4">
+          <div className="flex justify-between items-center">
+            <div className="flex-shrink-0">
+              <h1 className="text-2xl font-bold text-white">SPOiRMM</h1>
+            </div>
+            <div className="text-center flex-1">
+              <h2 className="text-2xl font-bold text-white">Project Workflow Management</h2>
+            </div>
+            <div className="flex-shrink-0">
+              <button
+                onClick={handleBackClick}
+                className="p-2 text-white hover:text-indigo-100 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 rounded-md transition-colors duration-200"
+                aria-label="Return to main navigation"
+              >
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
 
       {/* Main Content */}
       <main className="flex flex-row min-h-screen">

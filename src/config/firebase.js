@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
 import { getAuth, connectAuthEmulator } from "firebase/auth";
 import { getStorage, connectStorageEmulator } from "firebase/storage";
+import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
 
 // Environment variable validation
 const requiredEnvVars = [
@@ -38,6 +39,7 @@ const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth(app);
 export const storage = getStorage(app);
+export const functions = getFunctions(app);
 
 // Connect to emulators in development (only if explicitly enabled)
 if (import.meta.env.DEV && import.meta.env.VITE_USE_FIREBASE_EMULATORS === 'true') {
@@ -63,6 +65,14 @@ if (import.meta.env.DEV && import.meta.env.VITE_USE_FIREBASE_EMULATORS === 'true
     console.log('Connected to Storage emulator');
   } catch (error) {
     console.log('Storage emulator not running, using production');
+  }
+  
+  try {
+    // Functions emulator
+    connectFunctionsEmulator(functions, 'localhost', 5001);
+    console.log('Connected to Functions emulator');
+  } catch (error) {
+    console.log('Functions emulator not running, using production');
   }
 }
 

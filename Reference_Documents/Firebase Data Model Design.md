@@ -1273,13 +1273,57 @@ Reference_Documents/
 - Implement error tracking and alerting
 - Monitor database usage and costs
 
-### 10.2 Data Maintenance
+### 10.2 Cloud Functions Deployment
+
+#### Required Cloud Functions for User Management
+
+**Function: `deleteUserCompletely`**
+- **Type:** HTTPS Callable Function
+- **Purpose:** Deletes user from both Firestore and Firebase Authentication
+- **Security:** Only accessible by users with 'Admin' role
+- **Features:**
+  - Prevents self-deletion
+  - Deletes from Firestore `users` collection
+  - Deletes from Firebase Authentication
+  - Logs action to `auditLogs` collection
+  - Includes error handling and fallback mechanisms
+
+**Function: `onUserDocumentDeleted`**
+- **Type:** Firestore Trigger Function
+- **Purpose:** Automatically attempts to delete Firebase Auth user when Firestore document is deleted
+- **Trigger:** Fires when document is deleted from `users` collection
+- **Features:**
+  - Attempts to delete corresponding Firebase Auth user
+  - Logs success/failure to `auditLogs` collection
+  - Provides backup deletion mechanism
+
+#### Deployment Requirements
+- **Node.js Version:** 18+
+- **Firebase CLI:** Latest version
+- **Dependencies:** `firebase-admin`, `firebase-functions`
+- **Build Process:** TypeScript compilation required
+- **Deployment Command:** `firebase deploy --only functions`
+
+#### Current Status
+- **Functions Created:** ✅ (in `functions/src/index.ts`)
+- **Functions Deployed:** ❌ (deployment blocked by TypeScript compilation issues)
+- **Workaround:** User deletion currently only removes from Firestore
+- **Manual Cleanup:** Firebase Auth users must be deleted manually via Firebase Console
+
+#### Deployment Steps (When Ready)
+1. Navigate to `functions` directory
+2. Run `npm install` to install dependencies
+3. Run `npm run build` to compile TypeScript
+4. Run `firebase deploy --only functions` to deploy
+5. Verify functions are accessible in Firebase Console
+
+### 10.3 Data Maintenance
 - Regular backup procedures
 - Data archival strategies
 - Index optimization
 - Security rule reviews
 
-### 10.3 Cost Optimization
+### 10.4 Cost Optimization
 - Monitor read/write operations
 - Optimize queries to reduce costs
 - Implement caching strategies
