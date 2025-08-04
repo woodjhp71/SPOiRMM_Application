@@ -1,6 +1,6 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import logoImage from '../../assets/SPOiRMM Logo White Transparent_cr.png';
 
 interface HeaderProps {
   title?: string;
@@ -12,7 +12,6 @@ const Header: React.FC<HeaderProps> = ({
   showUserInfo = true 
 }) => {
   const { user, signOut } = useAuth();
-  const navigate = useNavigate();
 
   const handleSignOut = async () => {
     try {
@@ -34,7 +33,11 @@ const Header: React.FC<HeaderProps> = ({
       <div className="px-6 py-4">
         <div className="flex justify-between items-center">
           <div className="flex-shrink-0">
-            <h1 className="text-2xl font-bold text-white">SPOiRMM</h1>
+            <img 
+              src={logoImage} 
+              alt="SPOiRMM Logo" 
+              className="h-16 w-auto"
+            />
           </div>
           <div className="text-center flex-1">
             <h2 className="text-2xl font-bold text-white">{title}</h2>
