@@ -10,6 +10,7 @@ import {
   BuildingOfficeIcon,
   UsersIcon
 } from '@heroicons/react/24/outline';
+import Header from '../Header/Header';
 
 export interface Player {
   id: string;
@@ -351,38 +352,12 @@ const PlayersChart: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Standardized Header */}
+      <Header title="Players Chart Management" showUserInfo={true} />
+
+      {/* Main Content */}
       <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          {/* Header */}
-          {/* Header */}
-          <header
-            className="bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md"
-            role="banner"
-            aria-label="Application Header"
-          >
-            <div className="px-6 py-4">
-              <div className="flex justify-between items-center">
-                <div className="flex-shrink-0">
-                  <h1 className="text-2xl font-bold text-white">SPOiRMM</h1>
-                </div>
-                <div className="text-center flex-1">
-                  <h2 className="text-2xl font-bold text-white">Players Chart Management</h2>
-                </div>
-                <div className="flex-shrink-0">
-                  <button
-                    onClick={() => navigate('/organization')}
-                    className="p-2 text-white hover:text-blue-100 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 rounded-md transition-colors duration-200"
-                    aria-label="Return to organization setup"
-                  >
-                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </header>
-
           {/* Filters and Search */}
           <div className="p-6 border-b border-gray-200">
             <div className="flex justify-between items-center mb-4">

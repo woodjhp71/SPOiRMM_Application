@@ -7,8 +7,11 @@ import {
   FunnelIcon,
   EyeIcon,
   EyeSlashIcon,
-  DocumentArrowDownIcon
+  DocumentArrowDownIcon,
+  UserIcon,
+  BuildingOfficeIcon
 } from '@heroicons/react/24/outline';
+import Header from '../Header/Header';
 import PlayersSidePanel from './PlayersSidePanel';
 import { Player } from '../PlayersChart/PlayersChart';
 
@@ -149,9 +152,13 @@ const PlayersChartPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Standardized Header */}
+      <Header title="Players Chart Visualizer - Interactive Stakeholder Mapping and Analysis" showUserInfo={true} />
+
+      {/* Main Content */}
       <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          {/* Header */}
+          {/* Page Header */}
           <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
@@ -163,9 +170,6 @@ const PlayersChartPage: React.FC = () => {
                   Back to Project
                 </button>
                 <div>
-                  <h1 className="text-2xl font-bold text-white">
-                    Players Chart Visualizer - SPOiRMM
-                  </h1>
                   <p className="text-blue-100 mt-1">
                     Interactive Stakeholder Mapping and Analysis
                   </p>

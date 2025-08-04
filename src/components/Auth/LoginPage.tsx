@@ -8,6 +8,7 @@ import {
   User
 } from 'firebase/auth';
 import { auth } from '../../config/firebase';
+import logoImage from '../../assets/SPOiRMM Logo Transparent.png';
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -61,19 +62,24 @@ const LoginPage: React.FC = () => {
     try {
       const provider = new GoogleAuthProvider();
       
+      // Force the account picker to always show
+      provider.setCustomParameters({
+        prompt: 'select_account'
+      });
+      
       // This will show Google's account picker popup
       // Users can choose from all their Google accounts in the browser
       const result = await signInWithPopup(auth, provider);
       
-             // Check if the selected user is authorized
-       if (result.user.email !== AUTHORIZED_EMAIL) {
-         console.log('Access denied for:', result.user.email);
-         // Sign out the unauthorized user immediately
-         await auth.signOut();
-         setError('Access Denied: Only authorised users are allowed access to this system.');
-         setLoading(false);
-         return;
-       }
+      // Check if the selected user is authorized
+      if (result.user.email !== AUTHORIZED_EMAIL) {
+        console.log('Access denied for:', result.user.email);
+        // Sign out the unauthorized user immediately
+        await auth.signOut();
+        setError('Access Denied: Only authorised users are allowed access to this system.');
+        setLoading(false);
+        return;
+      }
       
       // User is authorized, redirect to welcome page
       console.log('Access granted for:', result.user.email);
@@ -100,12 +106,14 @@ const LoginPage: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
-          <div className="mx-auto h-12 w-12 bg-indigo-600 rounded-full flex items-center justify-center">
-            <svg className="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-            </svg>
+          <div className="mx-auto flex items-center justify-center">
+            <img 
+              src={logoImage} 
+              alt="SPOiRMM Logo" 
+              className="w-auto max-w-[50%]"
+            />
           </div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className="mt-1 text-center text-3xl font-extrabold text-gray-900">
             Sign in to SPOiRMM
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">

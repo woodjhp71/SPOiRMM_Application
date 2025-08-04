@@ -2,18 +2,22 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useActiveProjects } from '../../hooks/useProjects';
 import ProjectCard from '../ProjectCard/ProjectCard';
+import Header from '../Header/Header';
 
 const ProjectsList: React.FC = () => {
   const { data: activeProjects, isLoading, error } = useActiveProjects();
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        {/* Header */}
+      {/* Standardized Header */}
+      <Header title="All Active Projects" showUserInfo={true} />
+
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Page Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">All Active Projects</h1>
               <p className="mt-2 text-gray-600">View and manage all active risk management projects</p>
             </div>
             <Link
@@ -69,7 +73,7 @@ const ProjectsList: React.FC = () => {
             </div>
           )}
         </div>
-      </div>
+      </main>
     </div>
   );
 };

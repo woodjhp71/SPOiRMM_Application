@@ -9,6 +9,7 @@ import {
   ArrowLeftIcon,
   InformationCircleIcon
 } from '@heroicons/react/24/outline';
+import Header from '../Header/Header';
 
 export interface Issue {
   id: string;
@@ -177,9 +178,13 @@ const IssuesList: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Standardized Header */}
+      <Header title="Issues List - Issue Tracking and Risk Promotion" showUserInfo={true} />
+
+      {/* Main Content */}
       <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          {/* Header */}
+          {/* Page Header */}
           <div className="bg-gradient-to-r from-red-600 to-orange-600 px-6 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
@@ -191,9 +196,6 @@ const IssuesList: React.FC = () => {
                   Back to Project
                 </button>
                 <div>
-                  <h1 className="text-2xl font-bold text-white">
-                    Issues List - SPOiRMM
-                  </h1>
                   <p className="text-red-100 mt-1">
                     Issue Tracking and Risk Promotion
                   </p>

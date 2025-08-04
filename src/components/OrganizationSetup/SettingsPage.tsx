@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import Header from '../Header/Header';
 
 const SettingsPage: React.FC = () => {
   const navigate = useNavigate();
@@ -10,34 +11,8 @@ const SettingsPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header
-        className="bg-gradient-to-r from-red-600 to-red-700 text-white shadow-md"
-        role="banner"
-        aria-label="Application Header"
-      >
-        <div className="px-6 py-4">
-          <div className="flex justify-between items-center">
-            <div className="flex-shrink-0">
-              <h1 className="text-2xl font-bold text-white">SPOiRMM</h1>
-            </div>
-            <div className="text-center flex-1">
-              <h2 className="text-2xl font-bold text-white">Settings Management</h2>
-            </div>
-            <div className="flex-shrink-0">
-              <button
-                onClick={handleBackClick}
-                className="p-2 text-white hover:text-red-100 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 rounded-md transition-colors duration-200"
-                aria-label="Return to organization setup"
-              >
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                </svg>
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
+      {/* Standardized Header */}
+      <Header title="Settings Management" showUserInfo={true} />
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
